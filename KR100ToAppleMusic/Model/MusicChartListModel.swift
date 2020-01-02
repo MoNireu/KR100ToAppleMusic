@@ -15,6 +15,7 @@ class MusicChartListModel {
     var musicChartList = [MusicInfoVO]()
     
     func parseResult(success: (()->Void)? = nil, fail: (()->Void)? = nil){
+        // 파싱시작
         var result: String?
         let url = "https://m.app.melon.com/cds/main/mobile4web/main_chartPaging.htm"
         let userAgentString = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"

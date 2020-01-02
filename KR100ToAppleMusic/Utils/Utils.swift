@@ -32,6 +32,16 @@ class JWTModel: SKCloudServiceController {
         
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             print("Success: Authorized")
+            
+            self.requestStorefrontCountryCode() { res, err in
+                if res == nil {
+                    print("Error: Failed requesting StoreFront. Details - \(err!)")
+                } else {
+                    print("Success : Requesting StoreFront. Details - \(res!)")
+                    self.storeFront = res
+                }
+            }
+            
             return
         }
         
@@ -50,23 +60,14 @@ class JWTModel: SKCloudServiceController {
                 break
             }
         }
-        
-        self.requestStorefrontCountryCode() { res, err in
-            if res == nil {
-                print("Error: Failed requesting StoreFront. Details - \(err!)")
-            } else {
-                print("Success : Requesting StoreFront. Details - \(res!)")
-                self.storeFront = res
-            }
-        }
     }
     
     // TODO: - Connect Request param with MusicInfoVO
-    func searchMusic(devToken: String, storeFront: String, musicChart: [MusicInfoVO]) {
-        let url = "https://api.music.apple.com/v1/catalog/\(storeFront)/search"
-        
-        let param = ["term" : "\(musicChart)"]
-        
-        AF.request(<#T##url: URLConvertible##URLConvertible#>, method: <#T##HTTPMethod#>, parameters: <#T##Parameters?#>, encoding: <#T##ParameterEncoding#>, headers: <#T##HTTPHeaders?#>, interceptor: <#T##RequestInterceptor?#>)
-    }
+//    func searchMusic(devToken: String, storeFront: String, musicChart: [MusicInfoVO]) {
+//        let url = "https://api.music.apple.com/v1/catalog/\(storeFront)/search"
+//
+//        let param = ["term" : "\(musicChart)"]
+//
+//        AF.request(<#T##url: URLConvertible##URLConvertible#>, method: <#T##HTTPMethod#>, parameters: <#T##Parameters?#>, encoding: <#T##ParameterEncoding#>, headers: <#T##HTTPHeaders?#>, interceptor: <#T##RequestInterceptor?#>)
+//    }
 }
