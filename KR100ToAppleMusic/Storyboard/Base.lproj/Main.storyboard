@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8hb-uv-7mZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uQA-nd-aGW">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Music Chart ListVC-->
+        <!--[]시 기준-->
         <scene sceneID="jcy-dn-8cx">
             <objects>
                 <tableViewController id="8hb-uv-7mZ" customClass="MusicChartListVC" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
@@ -57,8 +57,36 @@
                             <outlet property="delegate" destination="8hb-uv-7mZ" id="sgk-zF-WVx"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="[]시 기준" id="L8d-Vy-bKd">
+                        <barButtonItem key="rightBarButtonItem" title="생성" id="dVt-9V-g2R">
+                            <connections>
+                                <action selector="createAction:" destination="8hb-uv-7mZ" id="V9e-La-UDD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="createBtn" destination="dVt-9V-g2R" id="Hg3-VS-0ZX"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UwA-0N-KQI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="992.75362318840587" y="185.49107142857142"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="UAx-Te-MnO">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uQA-nd-aGW" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="MuD-vp-9p6">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8hb-uv-7mZ" kind="relationship" relationship="rootViewController" id="4Uk-cv-vSU"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ayB-Nk-6Zg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="82.608695652173921" y="185.49107142857142"/>
         </scene>

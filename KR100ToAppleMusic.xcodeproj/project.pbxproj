@@ -18,6 +18,7 @@
 		E1AA587923BD92AC00A617F8 /* MusicInfoVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */; };
 		E1AA587B23BD93F000A617F8 /* MusicChartListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587A23BD93F000A617F8 /* MusicChartListModel.swift */; };
 		E1AA588123BD9EF600A617F8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA588023BD9EF600A617F8 /* Utils.swift */; };
+		E1B1D51723BDC88500997972 /* JWTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B1D51623BDC88500997972 /* JWTModel.swift */; };
 		FF8EEC751DB0160707B22E96 /* Pods_KR100ToAppleMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B845E5AEBAA447F9EE3BB7 /* Pods_KR100ToAppleMusic.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicInfoVO.swift; sourceTree = "<group>"; };
 		E1AA587A23BD93F000A617F8 /* MusicChartListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListModel.swift; sourceTree = "<group>"; };
 		E1AA588023BD9EF600A617F8 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		E1B1D51623BDC88500997972 /* JWTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWTModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 			children = (
 				E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */,
 				E1AA587A23BD93F000A617F8 /* MusicChartListModel.swift */,
+				E1B1D51623BDC88500997972 /* JWTModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1B1D51723BDC88500997972 /* JWTModel.swift in Sources */,
 				E1AA587923BD92AC00A617F8 /* MusicInfoVO.swift in Sources */,
 				E11BCF2C23BD8D61000A0FB9 /* AppDelegate.swift in Sources */,
 				E11BCF3623BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld in Sources */,
@@ -406,6 +410,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = TBWQTY9PVU;
 				INFOPLIST_FILE = KR100ToAppleMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -425,6 +430,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = TBWQTY9PVU;
 				INFOPLIST_FILE = KR100ToAppleMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

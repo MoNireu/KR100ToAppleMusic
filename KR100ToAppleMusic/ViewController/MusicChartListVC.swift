@@ -12,11 +12,16 @@ class MusicChartListVC: UITableViewController {
 
     var parsedHTML: String?
     var model = MusicChartListModel()
+    var jwtModel = JWTModel()
     
+    @IBOutlet var createBtn: UIBarButtonItem!
+    @IBAction func createAction(_ sender: Any) {
+        jwtModel.requestCloudServiceAuthorization()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         model.parseResult(success: {
-            self.alert("불러오기를 성공했습니다.")
+            self.alert("총 \(self.model.musicChartList.count)개의 불러오기를 성공했습니다.")
             self.tableView.reloadData()
         }, fail: nil)
     }
