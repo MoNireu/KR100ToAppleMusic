@@ -3,17 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		E11BCF2C23BD8D61000A0FB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF2B23BD8D61000A0FB9 /* AppDelegate.swift */; };
 		E11BCF2E23BD8D61000A0FB9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF2D23BD8D61000A0FB9 /* SceneDelegate.swift */; };
-		E11BCF3023BD8D61000A0FB9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF2F23BD8D61000A0FB9 /* ViewController.swift */; };
 		E11BCF3323BD8D61000A0FB9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E11BCF3123BD8D61000A0FB9 /* Main.storyboard */; };
 		E11BCF3623BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF3423BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld */; };
 		E11BCF3823BD8D62000A0FB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E11BCF3723BD8D62000A0FB9 /* Assets.xcassets */; };
 		E11BCF3B23BD8D62000A0FB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E11BCF3923BD8D62000A0FB9 /* LaunchScreen.storyboard */; };
+		E11BCF4323BD9026000A0FB9 /* MusicChartListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF4223BD9026000A0FB9 /* MusicChartListCell.swift */; };
+		E11BCF4523BD9040000A0FB9 /* MusicChartListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */; };
 		FF8EEC751DB0160707B22E96 /* Pods_KR100ToAppleMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B845E5AEBAA447F9EE3BB7 /* Pods_KR100ToAppleMusic.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,12 +25,13 @@
 		E11BCF2823BD8D60000A0FB9 /* KR100ToAppleMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KR100ToAppleMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E11BCF2B23BD8D61000A0FB9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E11BCF2D23BD8D61000A0FB9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E11BCF2F23BD8D61000A0FB9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E11BCF3223BD8D61000A0FB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E11BCF3523BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KR100ToAppleMusic.xcdatamodel; sourceTree = "<group>"; };
 		E11BCF3723BD8D62000A0FB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E11BCF3A23BD8D62000A0FB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E11BCF3C23BD8D62000A0FB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E11BCF4223BD9026000A0FB9 /* MusicChartListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListCell.swift; sourceTree = "<group>"; };
+		E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +60,6 @@
 				29EAAD796FF6D0056BC4E115 /* Pods-KR100ToAppleMusic.debug.xcconfig */,
 				026FF4060F144D31F9343167 /* Pods-KR100ToAppleMusic.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -83,16 +84,41 @@
 		E11BCF2A23BD8D61000A0FB9 /* KR100ToAppleMusic */ = {
 			isa = PBXGroup;
 			children = (
+				E11BCF4623BD9062000A0FB9 /* Storyboard */,
+				E11BCF4723BD9070000A0FB9 /* ViewController */,
+				E11BCF4823BD907C000A0FB9 /* Model */,
 				E11BCF2B23BD8D61000A0FB9 /* AppDelegate.swift */,
 				E11BCF2D23BD8D61000A0FB9 /* SceneDelegate.swift */,
-				E11BCF2F23BD8D61000A0FB9 /* ViewController.swift */,
-				E11BCF3123BD8D61000A0FB9 /* Main.storyboard */,
 				E11BCF3723BD8D62000A0FB9 /* Assets.xcassets */,
-				E11BCF3923BD8D62000A0FB9 /* LaunchScreen.storyboard */,
 				E11BCF3C23BD8D62000A0FB9 /* Info.plist */,
 				E11BCF3423BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld */,
 			);
 			path = KR100ToAppleMusic;
+			sourceTree = "<group>";
+		};
+		E11BCF4623BD9062000A0FB9 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				E11BCF3123BD8D61000A0FB9 /* Main.storyboard */,
+				E11BCF3923BD8D62000A0FB9 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		E11BCF4723BD9070000A0FB9 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E11BCF4223BD9026000A0FB9 /* MusicChartListCell.swift */,
+				E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		E11BCF4823BD907C000A0FB9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,10 +236,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E11BCF3023BD8D61000A0FB9 /* ViewController.swift in Sources */,
 				E11BCF2C23BD8D61000A0FB9 /* AppDelegate.swift in Sources */,
 				E11BCF3623BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld in Sources */,
+				E11BCF4323BD9026000A0FB9 /* MusicChartListCell.swift in Sources */,
 				E11BCF2E23BD8D61000A0FB9 /* SceneDelegate.swift in Sources */,
+				E11BCF4523BD9040000A0FB9 /* MusicChartListVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
