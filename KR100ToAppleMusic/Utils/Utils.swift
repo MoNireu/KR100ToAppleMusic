@@ -27,14 +27,14 @@ class JWTModel: SKCloudServiceController {
     
     func requestCloudServiceAuthorization(complete :((String)->Void)? = nil) {
         
-//        var storeFront: String?
-//        var userToken: String?
-        
         // 인증 상태 체크
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             print("Success: Authorized")
+            complete?("Authorized")
             return
         }
+        
+        
         
         SKCloudServiceController.requestAuthorization { authorizationStatus in
             switch authorizationStatus {
@@ -69,12 +69,17 @@ class JWTModel: SKCloudServiceController {
     }
     
     // TODO: - Connect Request param with MusicInfoVO
-    func searchMusic(storeFront: String?, musicChart: [MusicInfoVO]) {
+    func searchMusic(userToken: String?, storeFront: String?, musicChart: [MusicInfoVO]) {
         guard let storeFront = storeFront else {
             print("StoreFront 값을 전달받지 못했습니다.")
             return
         }
         let url = "https://api.music.apple.com/v1/catalog/\(storeFront)/search"
+        
+        let header: HTTPHeaders = [
+            "Music-User-Token" : "\(userToken!)",
+            "Authorization": "Bearer \(devToken)"
+        ]
         
         for i in 0 ..< musicChart.count - 99 {
             
@@ -87,10 +92,49 @@ class JWTModel: SKCloudServiceController {
                 "types" : "songs"
             ]
             
-            let call = AF.request(url, parameters: param)
+            let call = AF.request(url, parameters: param, headers: header)
             let jsonObject = call.responseJSON() { res in
                 print("\(res)")
             }
+        }
+    }
+}
+
+class TokenUtils {
+    func save(_ service: String,  account: String, value: String) {
+        let keyChainQuery: NSDictionary = [
+            kSecClass : kSecClassGenericPassword,
+            kSecAttrService : service,
+            kSecAttrAccount : account,
+            kSecValueData : value.data(using: .utf8)
+        ]
+        
+        SecItemDelete(keyChainQuery)
+        
+        let status: OSStatus = SecItemAdd(keyChainQuery, nil)
+        assert(status == noErr, "토큰 값 저장에 실패했습니다.")
+        NSLog("status = \(status)")
+    }
+    
+    func load(_ service: String, account: String) -> String? {
+        let keyChainQuery: NSDictionary = [
+            kSecClass : kSecClassGenericPassword,
+            kSecAttrService : service,
+            kSecAttrAccount : account,
+            kSecReturnData : kCFBooleanTrue,
+            kSecMatchLimit : kSecMatchLimitOne
+        ]
+        
+        var dataTypeRef: AnyObject?
+        let status: OSStatus = SecItemCopyMatching(keyChainQuery, &dataTypeRef)
+        
+        if (status == errSecSuccess) {
+            let retrievedData = dataTypeRef as! Data
+            let value = String(data: retrievedData, encoding: .utf8)
+            return value
+        } else {
+            print("Nothing was retrieved from the keychain. Status code \(status)")
+            return nil
         }
     }
 }

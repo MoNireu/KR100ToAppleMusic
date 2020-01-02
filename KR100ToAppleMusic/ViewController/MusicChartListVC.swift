@@ -11,22 +11,24 @@ import UIKit
 class MusicChartListVC: UITableViewController {
 
     var parsedHTML: String?
-    var model = MusicChartListModel()
-    var jwtModel = JWTModel()
+    let model = MusicChartListModel()
+    let jwtModel = JWTModel()
+    let tokenUtils = TokenUtils()
     
-    var userToken: String?
-    var storeFront: String?
+//    var userToken: String?
+//    var storeFront: String?
     
     @IBOutlet var createBtn: UIBarButtonItem!
     
     @IBAction func createAction(_ sender: Any) {
-        jwtModel.requestCloudServiceAuthorization() { res in
-            self.userToken = res
+        jwtModel.requestCloudServiceAuthorization() { userToken in
+            if userToken != "Authorized" {
+                self.tokenUtils.save("monireu.KR100ToAppleMusic", account: "userToken", value: userToken)
+            }
+            self.jwtModel.requestStoreFront() { storeFront in
+                self.jwtModel.searchMusic(userToken: self.tokenUtils.load("monireu.KR100ToAppleMusic", account: "userToken"), storeFront: storeFront, musicChart: self.model.musicChartList)
+            }
         }
-        jwtModel.requestStoreFront() { res in
-            self.storeFront = res
-        }
-        jwtModel.searchMusic(storeFront: self.storeFront, musicChart: model.musicChartList)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
