@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 import Alamofire
 import SwiftSoup
 
@@ -30,6 +31,9 @@ class MusicChartListModel {
         
         let resultHTML = req.responseString() { res in
             let html = res.value
+
+            var musicVal: String?
+            var artistVal: String?
             
             do {
                 let doc: Document = try SwiftSoup.parseBodyFragment(html!)
@@ -37,10 +41,19 @@ class MusicChartListModel {
                 let title = try doc.getElementsByClass("title ellipsis")
                 for i in 0 ..< artist.count {
                     let musicInfo = MusicInfoVO()
-                    musicInfo.rank   = String(i + 1)
-                    musicInfo.music  = try title.get(i).text()
-                    musicInfo.artist = try artist.get(i).text()
                     
+//                    musicInfo.rank = String(i+1)
+//
+//                    musicVal = try title.get(i).text()
+//                    musicInfo.music  = musicVal?.replacingOccurrences(of: " ", with: "+")
+//
+//                    artistVal = try artist.get(i).text()
+//                    musicInfo.artist = artistVal?.replacingOccurrences(of: " ", with: "+")
+                    
+                    musicInfo.rank = String(i+1)
+                    musicInfo.music = try title.get(i).text()
+                    musicInfo.artist = try artist.get(i).text()
+//
                     self.musicChartList.append(musicInfo)
                 }
                 

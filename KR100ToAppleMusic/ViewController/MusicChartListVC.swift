@@ -14,9 +14,19 @@ class MusicChartListVC: UITableViewController {
     var model = MusicChartListModel()
     var jwtModel = JWTModel()
     
+    var userToken: String?
+    var storeFront: String?
+    
     @IBOutlet var createBtn: UIBarButtonItem!
+    
     @IBAction func createAction(_ sender: Any) {
-        jwtModel.requestCloudServiceAuthorization()
+        jwtModel.requestCloudServiceAuthorization() { res in
+            self.userToken = res
+        }
+        jwtModel.requestStoreFront() { res in
+            self.storeFront = res
+        }
+        jwtModel.searchMusic(storeFront: self.storeFront, musicChart: model.musicChartList)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,10 +52,10 @@ class MusicChartListVC: UITableViewController {
             }
             
 
-        cell.rank.text   = (self.model.musicChartList[indexPath.row].rank)! + "위"
+        cell.rank.text   = ((self.model.musicChartList[indexPath.row].rank)! as String) + "위"
         cell.rank.sizeToFit()
-        cell.music.text  = self.model.musicChartList[indexPath.row].music
-        cell.artist.text = self.model.musicChartList[indexPath.row].artist
+        cell.music.text  = self.model.musicChartList[indexPath.row].music as String?
+        cell.artist.text = self.model.musicChartList[indexPath.row].artist as String?
             
         return cell
         }
