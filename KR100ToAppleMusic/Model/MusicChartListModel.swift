@@ -12,6 +12,8 @@ import SwiftSoup
 
 class MusicChartListModel {
     
+    var musicChartList = [MusicInfoVO]()
+    
     func parseResult() -> String {
         var result: String?
         let url = "https://m.app.melon.com/cds/main/mobile4web/main_chartPaging.htm"
@@ -32,7 +34,6 @@ class MusicChartListModel {
     }
     
     func parse (html: String?, success: (()->Void)? = nil, fail: (()->Void)? = nil) {
-        self.activityIndicator.startAnimating()
         do {
             let doc: Document = try SwiftSoup.parseBodyFragment(html!)
             let artist = try doc.getElementsByClass("name ellipsis")
@@ -51,9 +52,9 @@ class MusicChartListModel {
             }
             
         } catch Exception.Error(let type, let message) {
-            print("")
+            print("\(type) / \(message)")
         } catch {
-            print("")
+            print("에러가 발생했습니다.")
         }
         
         success?()
