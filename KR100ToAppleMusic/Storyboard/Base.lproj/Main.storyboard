@@ -6,10 +6,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Music Chart List-->
+        <!--Music Chart ListVC-->
         <scene sceneID="jcy-dn-8cx">
             <objects>
-                <tableViewController id="8hb-uv-7mZ" customClass="MusicChartList" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="8hb-uv-7mZ" customClass="MusicChartListVC" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Gfx-Bv-8JR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
