@@ -92,14 +92,12 @@ class JWTModel: SKCloudServiceController {
             "Authorization": "Bearer \(devToken)"
         ]
         
-        /*
-         이후에 오는 반복 구문안에 들어가야할 코드들
-         - 
-         */
-        for i in 0 ..< musicChart.count - 98 {
+        
+        for index in 0 ..< musicChart.count {
+            print("---\(index)---")
             
-            let modifiedArtistString = musicChart[i].artist?.replacingOccurrences(of: " ", with: "+")
-            let modifiedMusicString = musicChart[i].music?.replacingOccurrences(of: " ", with: "+")
+            let modifiedArtistString = musicChart[index].artist?.replacingOccurrences(of: " ", with: "+")
+            let modifiedMusicString = musicChart[index].music?.replacingOccurrences(of: " ", with: "+")
             
             let param : Parameters = [
                 "term" : "\(modifiedArtistString!)+\(modifiedMusicString!)",
@@ -109,12 +107,32 @@ class JWTModel: SKCloudServiceController {
             
             let call = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
             
-            
-            _ = call.responseJSON() { res in
-                print("success response.\n Result : \(res.result)")
+            call.responseJSON() { res in
+                guard let jsonObject = res.value as? NSDictionary else {
+                    print("Error : searchMusic() requestJSON()")
+                    return
+                }
+                let results = jsonObject["results"] as? NSDictionary
+                let songs = results?["songs"] as? NSDictionary
+                let data = songs?["data"] as? NSArray
+                let dataObject = data?.firstObject as? NSDictionary
+                let attributes = dataObject?["attributes"] as? NSDictionary
+                let playParams = attributes?["playParams"] as? NSDictionary
+                
+                guard let songId = playParams?["id"] as? String else {
+                    print("\(index+1)위 : 검색 결과 없음")
+                    return
+                }
+                print("\(index+1)위 : \(songId)")
             }
+            
         }
+        
     }
+    
+    //    func searchEachMusic(musicChart: [MusicInfoVO], index: Int, url: String, header: HTTPHeaders) {
+    //
+    //    }
 }
 
 class TokenUtils {
