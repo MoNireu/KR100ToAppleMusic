@@ -110,8 +110,8 @@ class JWTModel: SKCloudServiceController {
             let call = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
             
             
-            let jsonObject = call.responseData() { res in
-                print("Failed: \(res.result)")
+            _ = call.responseJSON() { res in
+                print("success response.\n Result : \(res.result)")
             }
         }
     }
