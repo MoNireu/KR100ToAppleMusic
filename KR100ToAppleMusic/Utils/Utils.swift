@@ -25,6 +25,9 @@ extension UITableViewController {
 class JWTModel: SKCloudServiceController {
     let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4NTUwMTUzLCJleHAiOjE1Nzg1OTMzNTN9.rpwbuSswlpKOdmsYhkbN7CKGk4DpgOXteZWi0pulBKKLF3-gfl2W7B8HQOgD7tGda9eeK7p8e3VpRIgWwuS9RQ"
     
+    var index = 0
+    var failCount = 0
+    
     func requestCloudServiceAuthorization(fail: ((String)->Void)? = nil, success :(()->Void)? = nil) {
         
         // 인증 상태 체크
@@ -73,6 +76,7 @@ class JWTModel: SKCloudServiceController {
         }
     }
     
+    
     // TODO: - Connect Request param with MusicInfoVO
     func searchMusic(musicChart: [MusicInfoVO]) {
         let tokenUtils = TokenUtils()
@@ -92,47 +96,80 @@ class JWTModel: SKCloudServiceController {
             "Authorization": "Bearer \(devToken)"
         ]
         
-        
-        for index in 0 ..< musicChart.count {
-            print("---\(index)---")
-            
-            let modifiedArtistString = musicChart[index].artist?.replacingOccurrences(of: " ", with: "+")
-            let modifiedMusicString = musicChart[index].music?.replacingOccurrences(of: " ", with: "+")
-            
-            let param : Parameters = [
-                "term" : "\(modifiedArtistString!)+\(modifiedMusicString!)",
-                "limit" : 1,
-                "types" : "songs"
-            ]
-            
-            let call = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
-            
-            call.responseJSON() { res in
-                guard let jsonObject = res.value as? NSDictionary else {
-                    print("Error : searchMusic() requestJSON()")
-                    return
-                }
-                let results = jsonObject["results"] as? NSDictionary
-                let songs = results?["songs"] as? NSDictionary
-                let data = songs?["data"] as? NSArray
-                let dataObject = data?.firstObject as? NSDictionary
-                let attributes = dataObject?["attributes"] as? NSDictionary
-                let playParams = attributes?["playParams"] as? NSDictionary
-                
-                guard let songId = playParams?["id"] as? String else {
-                    print("\(index+1)위 : 검색 결과 없음")
-                    return
-                }
-                print("\(index+1)위 : \(songId)")
-            }
-            
-        }
-        
+        print(header)
+       
+        self.searchEachMusic(musicChart: musicChart, url: url, header: header)
     }
     
-    //    func searchEachMusic(musicChart: [MusicInfoVO], index: Int, url: String, header: HTTPHeaders) {
-    //
-    //    }
+    
+    func searchEachMusic(musicChart: [MusicInfoVO], url: String, header: HTTPHeaders) {
+//        let modifiedArtistString = (musicChart[index].artist?.replacingOccurrences(of: " ", with: "+"))!
+//        let modifiedMusicString = (musicChart[index].music?.replacingOccurrences(of: " ", with: "+"))!
+        
+        let modifiedArtistString = modifyString(string: musicChart[index].artist)
+        let modifiedMusicString = modifyString(string: musicChart[index].music)
+        
+        let musicInfoString: String = modifiedMusicString + " " + modifiedArtistString
+        let param : [String : String] = [
+            "term" : musicInfoString,
+            "limit" : "1",
+            "types" : "songs,artists"
+        ]
+        print(param)
+        
+        let call = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
+//        print(call)
+        call.responseJSON() { res in
+            guard let jsonObject = res.value as? NSDictionary else {
+                print("Error : searchMusic() requestJSON()")
+                self.failCount = 0
+                return
+            }
+            
+            let results = jsonObject["results"] as? NSDictionary
+            let songs = results?["songs"] as? NSDictionary
+            let data = songs?["data"] as? NSArray
+            let dataObject = data?.firstObject as? NSDictionary
+
+//            let songId = dataObject?["id"] as? String
+            
+            guard let songId = dataObject?["id"] as? String else {
+                print("\(self.index+1)위 : 검색결과없음")
+                self.index += 1
+                self.failCount += 1
+                guard self.index < musicChart.count else {
+                    print("실패 : \(self.failCount)개")
+                    self.failCount = 0
+                    return
+                }
+                self.searchEachMusic(musicChart: musicChart, url: url, header: header)
+                return
+            }
+//            print(jsonObject)
+            print("\(self.index+1)위 : \(songId)")
+            self.index += 1
+            guard self.index < musicChart.count else {
+                print("실패 : \(self.failCount)개")
+                self.failCount = 0
+                return
+            }
+            self.searchEachMusic(musicChart: musicChart, url: url, header: header)
+            return
+        }
+    }
+    
+    func modifyString(string: String?) -> String {
+        let string = (string?.replacingOccurrences(of: " ", with: " "))!
+
+        let index = string.lastIndex(of: "(") ?? string.endIndex
+        if index != string.endIndex { // "("가 존재할 경우
+            if string.startIndex != index && string[string.index(before: index)] == " " {
+                return String(string[..<string.index(before: index)])
+            }
+        }
+        
+        return String(string[..<string.endIndex])
+    }
 }
 
 class TokenUtils {
