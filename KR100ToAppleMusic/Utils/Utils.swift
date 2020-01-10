@@ -23,7 +23,7 @@ extension UITableViewController {
 
 
 class JWTModel: SKCloudServiceController {
-    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4NTUwMTUzLCJleHAiOjE1Nzg1OTMzNTN9.rpwbuSswlpKOdmsYhkbN7CKGk4DpgOXteZWi0pulBKKLF3-gfl2W7B8HQOgD7tGda9eeK7p8e3VpRIgWwuS9RQ"
+    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4NjUzODIyLCJleHAiOjE1Nzg2OTcwMjJ9.UNYBYWF3YiO4vmtjUUKlUgbErKpUyNhvc6pG3sv5m69_jjdOfFSApFrtOFLILkeNzqC0OLM3Sku9brEBEDW95w"
     
     var index = 0
     var failCount = 0
@@ -133,26 +133,34 @@ class JWTModel: SKCloudServiceController {
 
 //            let songId = dataObject?["id"] as? String
             
+            // 검색 실패
             guard let songId = dataObject?["id"] as? String else {
                 print("\(self.index+1)위 : 검색결과없음")
+                musicChart[self.index].isSucceed = false
                 self.index += 1
                 self.failCount += 1
+                
                 guard self.index < musicChart.count else {
                     print("실패 : \(self.failCount)개")
                     self.failCount = 0
                     return
                 }
+                
                 self.searchEachMusic(musicChart: musicChart, url: url, header: header)
                 return
             }
 //            print(jsonObject)
+            // 검색 성공
             print("\(self.index+1)위 : \(songId)")
+            musicChart[self.index].isSucceed = true
             self.index += 1
+            
             guard self.index < musicChart.count else {
                 print("실패 : \(self.failCount)개")
                 self.failCount = 0
                 return
             }
+            
             self.searchEachMusic(musicChart: musicChart, url: url, header: header)
             return
         }

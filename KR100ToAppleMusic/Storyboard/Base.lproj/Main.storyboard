@@ -58,6 +58,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="[]시 기준" id="L8d-Vy-bKd">
+                        <barButtonItem key="leftBarButtonItem" enabled="NO" title="정렬" id="7im-yh-B0S">
+                            <connections>
+                                <action selector="sortAction:" destination="8hb-uv-7mZ" id="n1y-nt-fe1"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="생성" id="dVt-9V-g2R">
                             <connections>
                                 <action selector="createAction:" destination="8hb-uv-7mZ" id="V9e-La-UDD"/>
@@ -66,6 +71,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="createBtn" destination="dVt-9V-g2R" id="Hg3-VS-0ZX"/>
+                        <outlet property="sortBtn" destination="7im-yh-B0S" id="cJd-oY-bvc"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UwA-0N-KQI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
