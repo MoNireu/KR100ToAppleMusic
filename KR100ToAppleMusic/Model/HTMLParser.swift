@@ -11,9 +11,9 @@ import UIKit
 import Alamofire
 import SwiftSoup
 
-class MusicChartListModel {
+class HTMLParser {
     
-    var musicChartList = [MusicInfoVO]()
+    static var musicChartList = [MusicInfoVO]()
     
     func parseResult(success: (()->Void)? = nil, fail: ((String)->Void)? = nil){
         
@@ -47,10 +47,10 @@ class MusicChartListModel {
                     musicInfoObject.music = try title.get(i).text()
                     musicInfoObject.artist = try artist.get(i).text()
                     //
-                    self.musicChartList.append(musicInfoObject)
+                    HTMLParser.musicChartList.append(musicInfoObject)
                 }
                 
-                for vo in self.musicChartList {
+                for vo in HTMLParser.musicChartList {
                     print("\(vo.rank!) / \(vo.artist!) / \(vo.music!)")
                 }
             } catch Exception.Error(let type, let message) {

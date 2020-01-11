@@ -17,7 +17,7 @@ enum SortStatus: Int {
 
 class MusicChartListVC: UITableViewController {
     
-    let model = MusicChartListModel()
+    let htmlParser = HTMLParser()
     let musicSearch = MusicSearchUtil()
     let tokenUtils = TokenUtils()
     var sortStatus: SortStatus? = .showAll
@@ -26,7 +26,7 @@ class MusicChartListVC: UITableViewController {
     
     @IBOutlet var createBtn: UIBarButtonItem!
     @IBOutlet var sortBtn: UIBarButtonItem!
-    
+    var actIndicatorView: UIActivityIndicatorView?
     
     @IBAction func sortAction(_ sender: Any) {
         let alert = UIAlertController(title: "test", message: "test", preferredStyle: .actionSheet)
@@ -39,7 +39,7 @@ class MusicChartListVC: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "성공한 항목", style: .default) { _ in
             self.sortedList = [MusicInfoVO]()
-            for list in self.model.musicChartList {
+            for list in HTMLParser.musicChartList {
                 if list.isSucceed == true {
                     self.sortedList?.append(list)
                 }
@@ -50,7 +50,7 @@ class MusicChartListVC: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "실패한 항목", style: .destructive) { _ in
             self.sortedList = [MusicInfoVO]()
-            for list in self.model.musicChartList {
+            for list in HTMLParser.musicChartList {
                 if list.isSucceed == false {
                     self.sortedList?.append(list)
                 }
@@ -65,39 +65,50 @@ class MusicChartListVC: UITableViewController {
     
     @IBAction func createAction(_ sender: Any) {
         self.createBtn.isEnabled = false
+        
+        self.view.bringSubviewToFront(actIndicatorView!)
+        self.actIndicatorView?.startAnimating()
         // 인증 시도
-        musicSearch.requestCloudServiceAuthorization(
+        musicSearch.startSearching(
             fail: { msg in
+                self.actIndicatorView?.stopAnimating()
                 self.alert(msg)
-        },
-            success: {
-                self.musicSearch.requestCountryCode(
-                    fail: { msg in
-                        self.alert(msg)
-                },
-                    success: {
-                        self.musicSearch.searchMusic(musicChart: self.model.musicChartList)
-                        DispatchQueue.main.async {
-                            self.sortBtn.isEnabled = true
-                            self.sortBtn.tintColor = .systemBlue
-                        }
-                }
-                )
-        }
-        )
-        self.createBtn.isEnabled = true
+                self.createBtn.isEnabled = true
+        }, success: { msg in
+            self.actIndicatorView?.stopAnimating()
+            
+            let alert = UIAlertController(title: "음악 탐색 완료", message: msg, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default){ _ in
+                self.createBtn.isEnabled = true
+                self.sortBtn.isEnabled = true
+                self.sortBtn.tintColor = .systemBlue
+                
+                self.tableView.reloadData()
+            })
+            self.present(alert, animated: true)
+        })
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.sortBtn.tintColor = .clear
-        model.parseResult(
+        
+        actIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        actIndicatorView?.center = self.view.center
+        actIndicatorView?.color = .lightGray
+        actIndicatorView?.hidesWhenStopped = true
+        self.view.addSubview(actIndicatorView!)
+        
+        htmlParser.parseResult(
             success: {
-                self.alert("총 \(self.model.musicChartList.count)개의 불러오기를 성공했습니다.")
+                self.alert("총 \(HTMLParser.musicChartList.count)개의 불러오기를 성공했습니다.")
                 self.tableView.reloadData()
-        },
-            fail: nil
+            },
+            fail: { msg in
+                self.alert(msg)
+            }
         )
     }
     
@@ -115,7 +126,7 @@ class MusicChartListVC: UITableViewController {
         case .showFail:
             return self.sortedList!.count
         default:
-         return model.musicChartList.count
+         return HTMLParser.musicChartList.count
         }
     }
     
@@ -133,12 +144,12 @@ class MusicChartListVC: UITableViewController {
         case .showFail:
             cell = makeCell(cell, list: self.sortedList!, indexPath: indexPath, textColor: .red)
         default:
-            let isCellSucceed = self.model.musicChartList[indexPath.row].isSucceed
+            let isCellSucceed = HTMLParser.musicChartList[indexPath.row].isSucceed
             
             if isCellSucceed == true || isCellSucceed == nil {
-                cell = makeCell(cell, list: self.model.musicChartList, indexPath: indexPath)
+                cell = makeCell(cell, list: HTMLParser.musicChartList, indexPath: indexPath)
             } else {
-                cell = makeCell(cell, list: self.model.musicChartList, indexPath: indexPath, textColor: .red)
+                cell = makeCell(cell, list: HTMLParser.musicChartList, indexPath: indexPath, textColor: .red)
             }
         }
         return cell

@@ -16,7 +16,7 @@
 		E11BCF4323BD9026000A0FB9 /* MusicChartListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF4223BD9026000A0FB9 /* MusicChartListCell.swift */; };
 		E11BCF4523BD9040000A0FB9 /* MusicChartListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */; };
 		E1AA587923BD92AC00A617F8 /* MusicInfoVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */; };
-		E1AA587B23BD93F000A617F8 /* MusicChartListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587A23BD93F000A617F8 /* MusicChartListModel.swift */; };
+		E1AA587B23BD93F000A617F8 /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587A23BD93F000A617F8 /* HTMLParser.swift */; };
 		E1AA588123BD9EF600A617F8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA588023BD9EF600A617F8 /* Utils.swift */; };
 		FF8EEC751DB0160707B22E96 /* Pods_KR100ToAppleMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B845E5AEBAA447F9EE3BB7 /* Pods_KR100ToAppleMusic.framework */; };
 /* End PBXBuildFile section */
@@ -36,7 +36,7 @@
 		E11BCF4223BD9026000A0FB9 /* MusicChartListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListCell.swift; sourceTree = "<group>"; };
 		E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListVC.swift; sourceTree = "<group>"; };
 		E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicInfoVO.swift; sourceTree = "<group>"; };
-		E1AA587A23BD93F000A617F8 /* MusicChartListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListModel.swift; sourceTree = "<group>"; };
+		E1AA587A23BD93F000A617F8 /* HTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLParser.swift; sourceTree = "<group>"; };
 		E1AA588023BD9EF600A617F8 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,7 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */,
-				E1AA587A23BD93F000A617F8 /* MusicChartListModel.swift */,
+				E1AA587A23BD93F000A617F8 /* HTMLParser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,7 +258,7 @@
 				E11BCF3623BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld in Sources */,
 				E11BCF4323BD9026000A0FB9 /* MusicChartListCell.swift in Sources */,
 				E11BCF2E23BD8D61000A0FB9 /* SceneDelegate.swift in Sources */,
-				E1AA587B23BD93F000A617F8 /* MusicChartListModel.swift in Sources */,
+				E1AA587B23BD93F000A617F8 /* HTMLParser.swift in Sources */,
 				E11BCF4523BD9040000A0FB9 /* MusicChartListVC.swift in Sources */,
 				E1AA588123BD9EF600A617F8 /* Utils.swift in Sources */,
 			);
