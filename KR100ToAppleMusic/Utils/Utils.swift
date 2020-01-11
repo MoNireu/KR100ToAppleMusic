@@ -22,14 +22,13 @@ extension UITableViewController {
 }
 
 
-class JWTModel: SKCloudServiceController {
+class MusicSearchUtil: SKCloudServiceController {
     let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4NjUzODIyLCJleHAiOjE1Nzg2OTcwMjJ9.UNYBYWF3YiO4vmtjUUKlUgbErKpUyNhvc6pG3sv5m69_jjdOfFSApFrtOFLILkeNzqC0OLM3Sku9brEBEDW95w"
     
     var index = 0
     var failCount = 0
     
     func requestCloudServiceAuthorization(fail: ((String)->Void)? = nil, success :(()->Void)? = nil) {
-        
         // 인증 상태 체크
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             print("Success: Already Authorized")

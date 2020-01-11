@@ -18,13 +18,15 @@ enum SortStatus: Int {
 class MusicChartListVC: UITableViewController {
     
     let model = MusicChartListModel()
-    let jwtModel = JWTModel()
+    let musicSearch = MusicSearchUtil()
     let tokenUtils = TokenUtils()
     var sortStatus: SortStatus? = .showAll
     var sortedList: [MusicInfoVO]?
     
+    
     @IBOutlet var createBtn: UIBarButtonItem!
     @IBOutlet var sortBtn: UIBarButtonItem!
+    
     
     @IBAction func sortAction(_ sender: Any) {
         let alert = UIAlertController(title: "test", message: "test", preferredStyle: .actionSheet)
@@ -46,7 +48,7 @@ class MusicChartListVC: UITableViewController {
             self.tableView.reloadData()
         })
         
-        alert.addAction(UIAlertAction(title: "실패한 항목", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "실패한 항목", style: .destructive) { _ in
             self.sortedList = [MusicInfoVO]()
             for list in self.model.musicChartList {
                 if list.isSucceed == false {
@@ -60,20 +62,21 @@ class MusicChartListVC: UITableViewController {
         self.present(alert, animated: true)
     }
     
+    
     @IBAction func createAction(_ sender: Any) {
         self.createBtn.isEnabled = false
         // 인증 시도
-        jwtModel.requestCloudServiceAuthorization(
+        musicSearch.requestCloudServiceAuthorization(
             fail: { msg in
                 self.alert(msg)
         },
             success: {
-                self.jwtModel.requestCountryCode(
+                self.musicSearch.requestCountryCode(
                     fail: { msg in
                         self.alert(msg)
                 },
                     success: {
-                        self.jwtModel.searchMusic(musicChart: self.model.musicChartList)
+                        self.musicSearch.searchMusic(musicChart: self.model.musicChartList)
                         DispatchQueue.main.async {
                             self.sortBtn.isEnabled = true
                             self.sortBtn.tintColor = .systemBlue
@@ -84,6 +87,7 @@ class MusicChartListVC: UITableViewController {
         )
         self.createBtn.isEnabled = true
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,12 +101,13 @@ class MusicChartListVC: UITableViewController {
         )
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
     }
     
-    // MARK: - Table view data source
     
+    // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch sortStatus {
         case .showSuccess:
@@ -114,17 +119,13 @@ class MusicChartListVC: UITableViewController {
         }
     }
     
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard var cell = tableView.dequeueReusableCell(withIdentifier: "chart_cell", for: indexPath) as? MusicChartListCell else {
             print("error making cell")
             return UITableViewCell()
         }
-        
-//        guard isCellSucceed != nil else { // Apple Music 검색 이전일 경우 모두 출력
-//            cell = makeCell(cell, indexPath: indexPath)
-//            return cell
-//        }
         
         switch self.sortStatus {
         case .showSuccess:
@@ -142,6 +143,7 @@ class MusicChartListVC: UITableViewController {
         }
         return cell
     }
+    
     
     func makeCell(_ cell: MusicChartListCell, list: [MusicInfoVO], indexPath: IndexPath, textColor: UIColor = .label) -> MusicChartListCell {
         cell.rank.text   = ((list[indexPath.row].rank)! as String) + "위"
