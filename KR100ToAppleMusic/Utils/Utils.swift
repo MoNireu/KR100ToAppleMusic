@@ -28,12 +28,12 @@ class MusicSearchUtil: SKCloudServiceController {
     var index = 0
     var failCount = 0
     
-    func startSearching(fail: ((String)->Void)? = nil, success :((String?)->Void)? = nil) {
+    func startSearching(fail: ((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
         
         // 인증 상태 체크
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             print("Success: Already Authorized")
-            self.requestCountryCode(fail: fail, success: success)
+            self.requestCountryCode(fail: fail, success: success, complete: complete)
             return
         }
         
@@ -51,7 +51,7 @@ class MusicSearchUtil: SKCloudServiceController {
                         // User Token 저장
                         tokenUtils.save("monireu.KR100ToAppleMusic", account: "userToken", value: userToken!)
                         print("Success : Requesting User Token.") // TEST - Status Code
-                        self.requestCountryCode(fail: fail, success: success)
+                        self.requestCountryCode(fail: fail, success: success, complete: complete)
                     }
                 } // END of self.requestUserToken() Closure
             default:
@@ -61,7 +61,7 @@ class MusicSearchUtil: SKCloudServiceController {
     }
     
     
-    func requestCountryCode(fail :((String)->Void)? = nil, success: ((String)->Void)? = nil) {
+    func requestCountryCode(fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
         
         self.requestStorefrontCountryCode() { countryCode, err in
             if countryCode == nil {
@@ -72,14 +72,14 @@ class MusicSearchUtil: SKCloudServiceController {
                 print("Success : Requesting CountryCode.") // TEST - Status Code
                 let tokenUtils = TokenUtils()
                 tokenUtils.save("monireu.KR100ToAppleMusic", account: "countryCode", value: countryCode!)
-                self.searchMusic(fail: fail, success: success)
+                self.searchMusic(fail: fail, success: success, complete: complete)
             }
         }
     }
     
     
     // TODO: - Connect Request param with MusicInfoVO
-    func searchMusic(fail :((String)->Void)? = nil, success: ((String)->Void)? = nil) {
+    func searchMusic(fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
         let tokenUtils = TokenUtils()
         
         
@@ -104,11 +104,11 @@ class MusicSearchUtil: SKCloudServiceController {
         
         print(header)
        
-        self.searchEachMusic(url: url, header: header, fail: fail, success: success)
+        self.searchEachMusic(url: url, header: header, fail: fail, success: success, complete: complete)
     }
     
     
-    func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success: ((String)->Void)? = nil) {
+    func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
         
         let modifiedArtistString = modifyString(string: HTMLParser.musicChartList[index].artist)
         let modifiedMusicString  = modifyString(string: HTMLParser.musicChartList[index].music)
@@ -142,22 +142,25 @@ class MusicSearchUtil: SKCloudServiceController {
                 print("\(self.index+1)위 : \(songId)")
                 HTMLParser.musicChartList[self.index].isSucceed = true
                 self.index += 1
+                success?(Float(self.index))
                 // 검색 실패
             } else {
                 print("\(self.index+1)위 : 검색결과없음")
                 HTMLParser.musicChartList[self.index].isSucceed = false
                 self.index += 1
                 self.failCount += 1
+                success?(Float(self.index))
             }
             
+            // 탐색 종료
             guard self.index < HTMLParser.musicChartList.count else {
                 let msg = "총 \(HTMLParser.musicChartList.count)곡의 탐색이 완료되었습니다.\n성공 : \(HTMLParser.musicChartList.count - self.failCount)\n실패 : \(self.failCount)"
-                success?(msg)
+                complete?(msg)
                 print("탐색 종료\n실패 : \(self.failCount)개")
                 self.failCount = 0
                 return
             }
-            self.searchEachMusic(url: url, header: header, fail: fail, success: success)
+            self.searchEachMusic(url: url, header: header, fail: fail, success: success, complete: complete)
             return
         }
     }
