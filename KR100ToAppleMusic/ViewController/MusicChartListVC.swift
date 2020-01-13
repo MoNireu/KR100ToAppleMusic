@@ -135,7 +135,7 @@ class MusicChartListVC: UITableViewController {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH"
                 let currentHour = dateFormatter.string(from: Date())
-                self.navigationItem.title = "\(currentHour) : 00 집계"
+                self.navigationItem.title = "\(currentHour):00 집계"
                 
                 self.tableView.reloadData()
             },

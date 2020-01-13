@@ -39,7 +39,9 @@ class HTMLParser {
                 
                 let artist = try doc.getElementsByClass("name ellipsis")
                 let title  = try doc.getElementsByClass("title ellipsis")
+                let img = try doc.getElementsByClass("img")
                 
+
                 for i in 0 ..< artist.count {
                     
                     let musicInfoObject = MusicInfoVO()
@@ -47,7 +49,14 @@ class HTMLParser {
                     musicInfoObject.rank = String(i+1)
                     musicInfoObject.music = try title.get(i).text()
                     musicInfoObject.artist = try artist.get(i).text()
-                    //
+                    
+                    let imgURL = try img.get(i).attr("style")
+                    let startIndex = imgURL.index(imgURL.firstIndex(of: "'")!, offsetBy: 3)
+                    let endIndex = imgURL.lastIndex(of:"'")
+                    
+                    musicInfoObject.imgURL = String(imgURL[(startIndex)..<(endIndex)!])
+
+                    print(musicInfoObject.imgURL!)
                     appdelegate.musicChartList.append(musicInfoObject)
                 }
                 
