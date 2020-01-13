@@ -31,6 +31,7 @@ class MusicChartListVC: UITableViewController {
     let tokenUtils = TokenUtils()
     var sortStatus: SortStatus? = .showAll
     var sortedList: [MusicInfoVO]?
+    var isSearchComplete = false
     
     
     @IBAction func sortAction(_ sender: Any) {
@@ -71,15 +72,20 @@ class MusicChartListVC: UITableViewController {
     @IBAction func createAction(_ sender: Any) {
         self.createBtn.isEnabled = false
         
+        // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
+        if isSearchComplete == true {
+            return
+        }
         // 로딩창 생성
         self.showLoading()
         
-        // 인증 시도
+        // 탐색 로직 시작
         musicSearch.startSearching(
             fail: { msg in
                 self.actIndicatorView?.stopAnimating()
                 self.errorAlert(msg) {
                     self.hideLoading()
+                    self.createBtn.title = "재탐색"
                     self.createBtn.isEnabled = true
                 }
             },
@@ -95,10 +101,12 @@ class MusicChartListVC: UITableViewController {
             
             let alert = UIAlertController(title: "음악 탐색 완료", message: msg, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "확인", style: .default){ _ in
+                self.hideLoading()
+                self.createBtn.title = "트랙 생성"
                 self.createBtn.isEnabled = true
                 self.sortBtn.isEnabled = true
                 self.sortBtn.tintColor = .systemBlue
-                self.navigationController?.toolbar.isHidden = true
+                self.isSearchComplete = true
                 self.tableView.reloadData()
             })
             self.present(alert, animated: true)
