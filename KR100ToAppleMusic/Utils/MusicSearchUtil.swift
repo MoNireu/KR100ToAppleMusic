@@ -13,6 +13,8 @@ import Alamofire
 
 
 class MusicSearchUtil: SKCloudServiceController {
+    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+    
     let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4OTA5MTg5LCJleHAiOjE1Nzg5NTIzODl9.MtOcrMJeQCig25vp3EVEIRNaxbzkh23J4hD0J31yL5e8H1S1YPO0xgYEGWYhT1HtEPB8pwPFkOStRLTrnCMpdA"
     
     var index = 0
@@ -99,7 +101,12 @@ class MusicSearchUtil: SKCloudServiceController {
     
     
     func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        // 이미 탐색 성공한 항목일 경우에는 재탐색에서 제외.
+        guard self.appdelegate.musicChartList[index].isSucceed == true else {
+            index += 1
+            return
+        }
+        
         let modifiedArtistString = modifyString(string: appdelegate.musicChartList[index].artist)
         let modifiedMusicString  = modifyString(string: appdelegate.musicChartList[index].music)
         let musicInfoString: String = modifiedMusicString + " " + modifiedArtistString
@@ -130,21 +137,21 @@ class MusicSearchUtil: SKCloudServiceController {
             // 검색 성공
             if let songId = dataObject?["id"] as? String {
                 print("\(self.index+1)위 : \(songId)")
-                appdelegate.musicChartList[self.index].isSucceed = true
+                self.appdelegate.musicChartList[self.index].isSucceed = true
                 self.index += 1
                 success?(Float(self.index))
-                // 검색 실패
+            // 검색 실패
             } else {
                 print("\(self.index+1)위 : 검색결과없음")
-                appdelegate.musicChartList[self.index].isSucceed = false
+                self.appdelegate.musicChartList[self.index].isSucceed = false
                 self.index += 1
                 self.failCount += 1
                 success?(Float(self.index))
             }
             
             // 탐색 종료
-            guard self.index < appdelegate.musicChartList.count else {
-                let msg = "총 \(appdelegate.musicChartList.count)곡의 탐색이 완료되었습니다.\n성공 : \(appdelegate.musicChartList.count - self.failCount)\n실패 : \(self.failCount)"
+            guard self.index < self.appdelegate.musicChartList.count else {
+                let msg = "총 \(self.appdelegate.musicChartList.count)곡의 탐색이 완료되었습니다.\n성공 : \(self.appdelegate.musicChartList.count - self.failCount)\n실패 : \(self.failCount)"
                 complete?(msg)
                 print("탐색 종료\n실패 : \(self.failCount)개")
                 self.failCount = 0

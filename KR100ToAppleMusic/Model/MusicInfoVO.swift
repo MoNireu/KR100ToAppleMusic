@@ -14,4 +14,5 @@ class MusicInfoVO {
     var music: String?
     var artist: String?
     var isSucceed: Bool?
+    var musicID: String?
 }
