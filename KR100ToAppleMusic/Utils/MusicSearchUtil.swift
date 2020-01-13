@@ -138,6 +138,7 @@ class MusicSearchUtil: SKCloudServiceController {
             if let songId = dataObject?["id"] as? String {
                 print("\(self.index+1)위 : \(songId)")
                 self.appdelegate.musicChartList[self.index].isSucceed = true
+                self.appdelegate.musicChartList[self.index].musicID = songId
                 self.index += 1
                 success?(Float(self.index))
             // 검색 실패

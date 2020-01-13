@@ -79,8 +79,9 @@ class MusicChartListVC: UITableViewController {
             // TODO: 탐색 완료 후 플레이스트 생성 로직
             return
         }
-        // 로딩창 생성
+        
         self.alert("\(self.createBtn.title!)을 시작합니다.") {
+            // 로딩창 생성
             self.showLoading()
             // 탐색 로직 시작
             self.musicSearch.startSearching(
