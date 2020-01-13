@@ -72,14 +72,16 @@ class MusicChartListVC: UITableViewController {
         self.createBtn.isEnabled = false
         
         // 로딩창 생성
-        showLoading()
+        self.showLoading()
         
         // 인증 시도
         musicSearch.startSearching(
             fail: { msg in
                 self.actIndicatorView?.stopAnimating()
-                self.alert(msg)
-                self.createBtn.isEnabled = true
+                self.errorAlert(msg) {
+                    self.hideLoading()
+                    self.createBtn.isEnabled = true
+                }
             },
             success: { count in
                 self.progressLabel?.text     = "총 \(HTMLParser.musicChartList.count)곡 중 \(Int(count))곡 완료 "
@@ -115,6 +117,12 @@ class MusicChartListVC: UITableViewController {
         htmlParser.parseResult(
             success: {
                 self.alert("총 \(HTMLParser.musicChartList.count)개의 불러오기를 성공했습니다.")
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH"
+                let currentHour = dateFormatter.string(from: Date())
+                self.navigationItem.title = "\(currentHour) : 00 집계"
+                
                 self.tableView.reloadData()
             },
             fail: { msg in
@@ -133,8 +141,11 @@ class MusicChartListVC: UITableViewController {
         self.navigationController?.toolbar.isHidden = false
         customToolBarView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: (self.navigationController?.toolbar.frame.height)!))
         
-        let objectBetweenInterval = 15
+        let objectBetweenInterval = 10
         progressLabel                = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        progressLabel?.text          = "총 \(HTMLParser.musicChartList.count)곡 중 0곡 완료 "
+        progressLabel?.sizeToFit()
+        progressLabel?.center.x      = (self.customToolBarView?.center.x)!
         progressLabel?.center.y      = self.customToolBarView!.center.y - CGFloat(objectBetweenInterval)
         progressLabel?.textAlignment = .center
         progressLabel?.textColor     = .label
@@ -155,6 +166,14 @@ class MusicChartListVC: UITableViewController {
         self.customToolBarView?.addSubview(actIndicatorView!)
         
         self.navigationController?.toolbar.addSubview(customToolBarView!)
+    }
+    
+    
+    func hideLoading() {
+        self.navigationController?.toolbar.isHidden = true
+        progressLabel = nil
+        progressBar = nil
+        actIndicatorView = nil
     }
     
     

@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--[]시 기준-->
+        <!--Music Chart ListVC-->
         <scene sceneID="jcy-dn-8cx">
             <objects>
                 <tableViewController id="8hb-uv-7mZ" customClass="MusicChartListVC" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
@@ -62,13 +62,13 @@
                             <outlet property="delegate" destination="8hb-uv-7mZ" id="sgk-zF-WVx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="[]시 기준" id="L8d-Vy-bKd">
+                    <navigationItem key="navigationItem" id="L8d-Vy-bKd">
                         <barButtonItem key="leftBarButtonItem" enabled="NO" title="정렬" id="7im-yh-B0S">
                             <connections>
                                 <action selector="sortAction:" destination="8hb-uv-7mZ" id="n1y-nt-fe1"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="생성" id="dVt-9V-g2R">
+                        <barButtonItem key="rightBarButtonItem" title="탐색" id="dVt-9V-g2R">
                             <connections>
                                 <action selector="createAction:" destination="8hb-uv-7mZ" id="V9e-La-UDD"/>
                             </connections>

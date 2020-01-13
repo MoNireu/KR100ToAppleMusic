@@ -19,6 +19,14 @@ extension UITableViewController {
         })
         self.present(alert, animated: true)
     }
+    
+    func errorAlert(_ message: String, completion: (()->Void)? = nil) {
+        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
+            completion?()
+        })
+        self.present(alert, animated: true)
+    }
 }
 
 
