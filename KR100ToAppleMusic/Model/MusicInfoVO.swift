@@ -13,7 +13,7 @@ class MusicInfoVO {
     var rank: String?
     var music: String?
     var artist: String?
-    var imgURL: String?
+    var melonAlbumImg: String?
     var isSucceed: Bool?
     var musicID: String?
 }

@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -82,6 +83,76 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UwA-0N-KQI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="992.75362318840587" y="185.49107142857142"/>
+        </scene>
+        <!--Manual Music SearchVC-->
+        <scene sceneID="GcD-4D-yhl">
+            <objects>
+                <viewController storyboardIdentifier="manual_music_search" id="2iD-2o-xsT" customClass="ManualMusicSearchVC" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eGb-x1-aBX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Ui-nQ-fL0">
+                                <rect key="frame" x="132" y="74" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="6Ui-nQ-fL0" secondAttribute="height" multiplier="1:1" id="Yfq-C2-LwA"/>
+                                    <constraint firstAttribute="width" constant="150" id="wd0-Hq-D4T"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="노래 제목" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elP-f1-ReR">
+                                <rect key="frame" x="20" y="232" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="가수 이름" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qoc-5X-Mvd">
+                                <rect key="frame" x="20" y="261" width="374" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="081-om-Gp9">
+                                <rect key="frame" x="20" y="287" width="374" height="575"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rft-Qf-XCI">
+                                        <rect key="frame" x="0.0" y="28" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rft-Qf-XCI" id="ioN-yp-lwu">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Qoc-5X-Mvd" firstAttribute="top" secondItem="elP-f1-ReR" secondAttribute="bottom" constant="8" id="EKE-Rg-Ujq"/>
+                            <constraint firstItem="Qoc-5X-Mvd" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="IWK-5n-Ycq"/>
+                            <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="081-om-Gp9" secondAttribute="trailing" constant="20" id="K0X-s5-yZ3"/>
+                            <constraint firstItem="elP-f1-ReR" firstAttribute="top" secondItem="6Ui-nQ-fL0" secondAttribute="bottom" constant="8" id="Ksv-oD-PAN"/>
+                            <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="Qoc-5X-Mvd" secondAttribute="trailing" constant="20" id="ZMV-fL-kwf"/>
+                            <constraint firstItem="081-om-Gp9" firstAttribute="bottom" secondItem="JCF-vx-fHZ" secondAttribute="bottom" id="ZYd-HG-ygj"/>
+                            <constraint firstItem="6Ui-nQ-fL0" firstAttribute="centerX" secondItem="eGb-x1-aBX" secondAttribute="centerX" id="gYR-es-FcL"/>
+                            <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="elP-f1-ReR" secondAttribute="trailing" constant="20" id="gwJ-R9-F7k"/>
+                            <constraint firstItem="081-om-Gp9" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="mXU-lm-Ox4"/>
+                            <constraint firstItem="elP-f1-ReR" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="rDX-jq-3o1"/>
+                            <constraint firstItem="081-om-Gp9" firstAttribute="top" secondItem="Qoc-5X-Mvd" secondAttribute="bottom" constant="8" id="sxO-S7-v6t"/>
+                            <constraint firstItem="6Ui-nQ-fL0" firstAttribute="top" secondItem="JCF-vx-fHZ" secondAttribute="top" constant="30" id="t2u-Eq-kq5"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JCF-vx-fHZ"/>
+                    </view>
+                    <connections>
+                        <outlet property="artistLbl" destination="Qoc-5X-Mvd" id="nHO-ST-ByV"/>
+                        <outlet property="melonAlbumImage" destination="6Ui-nQ-fL0" id="MGh-57-SDo"/>
+                        <outlet property="musicLbl" destination="elP-f1-ReR" id="9V8-Vv-wiE"/>
+                        <outlet property="tableView" destination="081-om-Gp9" id="MdW-qY-uvm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tj1-Mq-1ye" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1869.5652173913045" y="185.49107142857142"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UAx-Te-MnO">

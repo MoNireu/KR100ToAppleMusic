@@ -54,9 +54,9 @@ class HTMLParser {
                     let startIndex = imgURL.index(imgURL.firstIndex(of: "'")!, offsetBy: 3)
                     let endIndex = imgURL.lastIndex(of:"'")
                     
-                    musicInfoObject.imgURL = String(imgURL[(startIndex)..<(endIndex)!])
+                    musicInfoObject.melonAlbumImg = String(imgURL[(startIndex)..<(endIndex)!])
 
-                    print(musicInfoObject.imgURL!)
+                    print(musicInfoObject.melonAlbumImg!)
                     appdelegate.musicChartList.append(musicInfoObject)
                 }
                 

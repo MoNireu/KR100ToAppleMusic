@@ -248,7 +248,13 @@ class MusicChartListVC: UITableViewController {
         }
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-            return
+            let manualMusicSearchVC = self.storyboard?.instantiateViewController(identifier: "manual_music_search") as! ManualMusicSearchVC
+            
+            manualMusicSearchVC.music  = selectedMusicTitle
+            manualMusicSearchVC.artist = selectedMusicArtist
+            manualMusicSearchVC.melonAlbumImageURL = self.appdelegate.musicChartList[originIndex].melonAlbumImg
+            
+            self.present(manualMusicSearchVC, animated: true)
         })
         self.present(alert, animated: true)
     }
