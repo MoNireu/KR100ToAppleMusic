@@ -103,13 +103,14 @@ class MusicChartListVC: UITableViewController {
                 complete: { msg in
                     self.actIndicatorView?.stopAnimating()
                     
-                    self.okAlert("음악 탐색 완료") {
+                    self.okAlert("\(msg)") {
                         self.hideLoading()
-                        self.createBtn.title = "트랙 생성"
+                        self.createBtn.title     = "트랙 생성"
                         self.createBtn.isEnabled = true
-                        self.sortBtn.isEnabled = true
-                        self.sortBtn.tintColor = .systemBlue
-                        self.isSearchComplete = true
+                        self.sortBtn.isEnabled   = true
+                        self.sortBtn.tintColor   = .systemBlue
+                        self.isSearchComplete    = true
+                        self.tableView.allowsSelection = true
                         self.tableView.reloadData()
                     }
                 }
@@ -121,6 +122,7 @@ class MusicChartListVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.allowsSelection = false
         self.sortBtn.tintColor = .clear
         self.navigationController?.toolbar.isHidden = true
         
@@ -203,7 +205,6 @@ class MusicChartListVC: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard var cell = tableView.dequeueReusableCell(withIdentifier: "chart_cell", for: indexPath) as? MusicChartListCell else {
             print("error making cell")
             return UITableViewCell()
@@ -224,6 +225,32 @@ class MusicChartListVC: UITableViewController {
             }
         }
         return cell
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var originIndex = 0
+        
+        switch self.sortStatus {
+        case .showAll:
+            originIndex = indexPath.row
+        default:
+            originIndex = Int((self.sortedList?[indexPath.row].rank)!)! - 1
+        }
+        
+        let selectedMusicTitle  = appdelegate.musicChartList[originIndex].music
+        let selectedMusicArtist = appdelegate.musicChartList[originIndex].artist
+        
+        let alert = UIAlertController(title: "선택한 곡", message: "\n\(selectedMusicTitle!) - \(selectedMusicArtist!)", preferredStyle: .alert)
+        alert.addTextField() { tf in
+            tf.placeholder = "수동 검색할 곡 명을 입력해주세요"
+            tf.textAlignment = .center
+        }
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            return
+        })
+        self.present(alert, animated: true)
     }
     
     
