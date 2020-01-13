@@ -11,7 +11,34 @@ import UIKit
 import StoreKit
 import Alamofire
 
-extension UITableViewController {
+//extension UITableViewController {
+//    func okAlert(_ message: String, completion: (()->Void)? = nil) {
+//        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
+//            completion?()
+//        })
+//        self.present(alert, animated: true)
+//    }
+//    
+//    func errorAlert(_ message: String, completion: (()->Void)? = nil) {
+//        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
+//            completion?()
+//        })
+//        self.present(alert, animated: true)
+//    }
+//    
+//    func alert(_ message: String, completion: (()->Void)? = nil) {
+//        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
+//            completion?()
+//        })
+//        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+//        self.present(alert, animated: true)
+//    }
+//}
+
+extension UIViewController {
     func okAlert(_ message: String, completion: (()->Void)? = nil) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in

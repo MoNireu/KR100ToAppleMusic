@@ -20,7 +20,7 @@ class MusicSearchUtil: SKCloudServiceController {
     var index = 0
     var failCount = 0
     
-    func startSearching(fail: ((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
+    func startSearching(fail: ((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
         
         // 인증 상태 체크
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
@@ -53,7 +53,7 @@ class MusicSearchUtil: SKCloudServiceController {
     }
     
     
-    func requestCountryCode(fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
+    func requestCountryCode(fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
         
         self.requestStorefrontCountryCode() { countryCode, err in
             if countryCode == nil {
@@ -64,14 +64,14 @@ class MusicSearchUtil: SKCloudServiceController {
                 print("Success : Requesting CountryCode.") // TEST - Status Code
                 let tokenUtils = TokenUtils()
                 tokenUtils.save("monireu.KR100ToAppleMusic", account: "countryCode", value: countryCode!)
-                self.searchMusic(fail: fail, success: success, complete: complete)
+                self.startSearch(fail: fail, success: success, complete: complete)
             }
         }
     }
     
     
     // TODO: - Connect Request param with MusicInfoVO
-    func searchMusic(fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
+    func startSearch(keyWord: String? = nil, fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
         let tokenUtils = TokenUtils()
         
         
@@ -96,11 +96,15 @@ class MusicSearchUtil: SKCloudServiceController {
         
         print(header)
        
-        self.searchEachMusic(url: url, header: header, fail: fail, success: success, complete: complete)
+        if keyWord == nil {
+            self.searchEachMusic(url: url, header: header, fail: fail, success: success, complete: complete)
+        } else {
+            self.searchOneMusic(url: url, header: header, keyWord: keyWord!, fail: fail, success: success, complete: complete)
+        }
     }
     
     
-    func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
+    func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
         // 이미 탐색 성공한 항목일 경우에는 재탐색에서 제외.
         guard self.appdelegate.musicChartList[index].isSucceed != true else {
             index += 1
@@ -140,14 +144,14 @@ class MusicSearchUtil: SKCloudServiceController {
                 self.appdelegate.musicChartList[self.index].isSucceed = true
                 self.appdelegate.musicChartList[self.index].musicID = songId
                 self.index += 1
-                success?(Float(self.index))
+                success?(Float(self.index) as AnyObject)
             // 검색 실패
             } else {
                 print("\(self.index+1)위 : 검색결과없음")
                 self.appdelegate.musicChartList[self.index].isSucceed = false
                 self.index += 1
                 self.failCount += 1
-                success?(Float(self.index))
+                success?(Float(self.index) as AnyObject)
             }
             
             // 탐색 종료
@@ -160,6 +164,61 @@ class MusicSearchUtil: SKCloudServiceController {
             }
             self.searchEachMusic(url: url, header: header, fail: fail, success: success, complete: complete)
             return
+        }
+    }
+    
+    
+    func searchOneMusic(url: String, header: HTTPHeaders, keyWord: String, fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
+        
+        let param : [String : String] = [
+            "term" : keyWord,
+            "limit" : "7",
+            "types" : "songs"
+        ]
+        
+        let call = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: header)
+        call.responseJSON(){ res in
+            guard let jsonObject = res.value as? NSDictionary else {
+                let msg = "잘못된 응답형식입니다."
+                fail?(msg)
+                print("Error : searchMusic() requestJSON()")
+                return
+            }
+            
+            
+            let results = jsonObject["results"] as? NSDictionary
+            let songs = results?["songs"] as? NSDictionary
+            let data = songs?["data"] as? NSArray
+            
+            for list in data! {
+                let dataObject = list as? NSDictionary
+                let attributes = dataObject?["attributes"] as? NSDictionary
+                
+                let musicID    = dataObject?["id"] as! String
+                let artistName = attributes?["artistName"] as! String
+                let music      = attributes?["name"] as! String
+                
+                let artwork = attributes?["artwork"] as! NSDictionary
+                let url = artwork["url"] as! String
+                
+                let startIndex = url.startIndex
+                let endIndex = url.index(url.endIndex, offsetBy: -14)
+                let imgURL = String(url[startIndex..<endIndex])
+                
+                let manualSearchMusicInfo = ManualSearchMusicInfoVO()
+                
+                manualSearchMusicInfo.musicID = musicID
+                manualSearchMusicInfo.artist  = artistName
+                manualSearchMusicInfo.music   = music
+                manualSearchMusicInfo.imgURL  = imgURL
+                
+                let img = URL(string: imgURL + "50x50bb.jpeg")
+                manualSearchMusicInfo.img = try! UIImage(data: Data(contentsOf: img!))
+                
+                success?(manualSearchMusicInfo)
+            }
+            let msg = "완료"
+            complete?(msg)
         }
     }
     

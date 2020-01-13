@@ -92,6 +92,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="7Fl-Ee-kDe">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Ui-nQ-fL0">
                                 <rect key="frame" x="132" y="74" width="150" height="150"/>
                                 <constraints>
@@ -111,40 +114,83 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="081-om-Gp9">
-                                <rect key="frame" x="20" y="287" width="374" height="575"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="081-om-Gp9">
+                                <rect key="frame" x="0.0" y="338" width="414" height="524"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="lBu-vn-xJP">
+                                    <rect key="frame" x="0.0" y="126" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rft-Qf-XCI">
-                                        <rect key="frame" x="0.0" y="28" width="374" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="manual_music_search_cell" rowHeight="70" id="rft-Qf-XCI" customClass="ManualMusicSearchCell" customModule="KR100ToAppleMusic" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rft-Qf-XCI" id="ioN-yp-lwu">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1RL-4f-hmr">
+                                                    <rect key="frame" x="20" y="10" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="노래 제목" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofL-5L-UKE">
+                                                    <rect key="frame" x="78" y="11" width="276" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="가수 이름" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pE7-N7-MOi">
+                                                    <rect key="frame" x="78" y="38" width="276" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="appleAlbumImg" destination="1RL-4f-hmr" id="g0e-ad-L1h"/>
+                                            <outlet property="artist" destination="pE7-N7-MOi" id="GHB-nQ-1ae"/>
+                                            <outlet property="music" destination="ofL-5L-UKE" id="Tjd-zo-giE"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="검색결과" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fy5-pB-GII">
+                                <rect key="frame" x="20" y="309" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="7Fl-Ee-kDe" firstAttribute="centerX" secondItem="eGb-x1-aBX" secondAttribute="centerX" id="7Z0-B2-eTm"/>
+                            <constraint firstItem="7Fl-Ee-kDe" firstAttribute="centerY" secondItem="eGb-x1-aBX" secondAttribute="centerY" id="9jd-4m-uHo"/>
+                            <constraint firstItem="fy5-pB-GII" firstAttribute="top" secondItem="Qoc-5X-Mvd" secondAttribute="bottom" constant="30" id="Cac-SY-DD8"/>
                             <constraint firstItem="Qoc-5X-Mvd" firstAttribute="top" secondItem="elP-f1-ReR" secondAttribute="bottom" constant="8" id="EKE-Rg-Ujq"/>
+                            <constraint firstItem="081-om-Gp9" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" id="Hid-0O-Oy9"/>
                             <constraint firstItem="Qoc-5X-Mvd" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="IWK-5n-Ycq"/>
-                            <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="081-om-Gp9" secondAttribute="trailing" constant="20" id="K0X-s5-yZ3"/>
                             <constraint firstItem="elP-f1-ReR" firstAttribute="top" secondItem="6Ui-nQ-fL0" secondAttribute="bottom" constant="8" id="Ksv-oD-PAN"/>
+                            <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="fy5-pB-GII" secondAttribute="trailing" constant="20" id="Tyg-YU-Fm8"/>
                             <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="Qoc-5X-Mvd" secondAttribute="trailing" constant="20" id="ZMV-fL-kwf"/>
                             <constraint firstItem="081-om-Gp9" firstAttribute="bottom" secondItem="JCF-vx-fHZ" secondAttribute="bottom" id="ZYd-HG-ygj"/>
+                            <constraint firstItem="fy5-pB-GII" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="fh7-QH-zcC"/>
                             <constraint firstItem="6Ui-nQ-fL0" firstAttribute="centerX" secondItem="eGb-x1-aBX" secondAttribute="centerX" id="gYR-es-FcL"/>
                             <constraint firstItem="JCF-vx-fHZ" firstAttribute="trailing" secondItem="elP-f1-ReR" secondAttribute="trailing" constant="20" id="gwJ-R9-F7k"/>
-                            <constraint firstItem="081-om-Gp9" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="mXU-lm-Ox4"/>
                             <constraint firstItem="elP-f1-ReR" firstAttribute="leading" secondItem="JCF-vx-fHZ" secondAttribute="leading" constant="20" id="rDX-jq-3o1"/>
-                            <constraint firstItem="081-om-Gp9" firstAttribute="top" secondItem="Qoc-5X-Mvd" secondAttribute="bottom" constant="8" id="sxO-S7-v6t"/>
+                            <constraint firstItem="081-om-Gp9" firstAttribute="top" secondItem="fy5-pB-GII" secondAttribute="bottom" constant="8" id="s15-d5-sTp"/>
+                            <constraint firstItem="081-om-Gp9" firstAttribute="trailing" secondItem="JCF-vx-fHZ" secondAttribute="trailing" id="spO-In-u2d"/>
                             <constraint firstItem="6Ui-nQ-fL0" firstAttribute="top" secondItem="JCF-vx-fHZ" secondAttribute="top" constant="30" id="t2u-Eq-kq5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="JCF-vx-fHZ"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="7Fl-Ee-kDe" id="GRO-aM-FW0"/>
                         <outlet property="artistLbl" destination="Qoc-5X-Mvd" id="nHO-ST-ByV"/>
+                        <outlet property="keywordLbl" destination="fy5-pB-GII" id="Clt-9P-VdW"/>
                         <outlet property="melonAlbumImage" destination="6Ui-nQ-fL0" id="MGh-57-SDo"/>
                         <outlet property="musicLbl" destination="elP-f1-ReR" id="9V8-Vv-wiE"/>
                         <outlet property="tableView" destination="081-om-Gp9" id="MdW-qY-uvm"/>

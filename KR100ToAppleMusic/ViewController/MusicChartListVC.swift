@@ -93,7 +93,8 @@ class MusicChartListVC: UITableViewController {
                         self.createBtn.isEnabled = true
                     }
                 },
-                success: { count in
+                success: { cnt in
+                    let count = cnt as! Float
                     self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
                     self.progressLabel?.sizeToFit()
                     self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
@@ -122,7 +123,7 @@ class MusicChartListVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.allowsSelection = false
+        self.tableView.allowsSelection = true
         self.sortBtn.tintColor = .clear
         self.navigationController?.toolbar.isHidden = true
         
@@ -241,19 +242,26 @@ class MusicChartListVC: UITableViewController {
         let selectedMusicTitle  = appdelegate.musicChartList[originIndex].music
         let selectedMusicArtist = appdelegate.musicChartList[originIndex].artist
         
-        let alert = UIAlertController(title: "선택한 곡", message: "\n\(selectedMusicTitle!) - \(selectedMusicArtist!)", preferredStyle: .alert)
+        let alert = UIAlertController(title: "수동 검색", message: "\n\(selectedMusicTitle!)\n\(selectedMusicArtist!)", preferredStyle: .alert)
         alert.addTextField() { tf in
             tf.placeholder = "수동 검색할 곡 명을 입력해주세요"
-            tf.textAlignment = .center
+            tf.textAlignment = .natural
         }
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            guard alert.textFields?.first?.text != nil && alert.textFields?.first?.text?.isEmpty == false  else{
+                self.errorAlert("검색어를 입력해주세요.")
+                return
+            }
+            
             let manualMusicSearchVC = self.storyboard?.instantiateViewController(identifier: "manual_music_search") as! ManualMusicSearchVC
             
-            manualMusicSearchVC.music  = selectedMusicTitle
-            manualMusicSearchVC.artist = selectedMusicArtist
+            manualMusicSearchVC.music              = selectedMusicTitle
+            manualMusicSearchVC.artist             = selectedMusicArtist
+            manualMusicSearchVC.keyword            = alert.textFields?.first!.text
+            manualMusicSearchVC.originIndex        = originIndex
             manualMusicSearchVC.melonAlbumImageURL = self.appdelegate.musicChartList[originIndex].melonAlbumImg
-            
+
             self.present(manualMusicSearchVC, animated: true)
         })
         self.present(alert, animated: true)
@@ -261,12 +269,12 @@ class MusicChartListVC: UITableViewController {
     
     
     func makeCell(_ cell: MusicChartListCell, list: [MusicInfoVO], indexPath: IndexPath, textColor: UIColor = .label) -> MusicChartListCell {
-        cell.rank.text   = ((list[indexPath.row].rank)! as String) + "위"
+        cell.rank.text        = ((list[indexPath.row].rank)! as String) + "위"
         cell.rank.sizeToFit()
-        cell.rank.textColor = textColor
-        cell.music.text  = list[indexPath.row].music as String?
-        cell.music.textColor = textColor
-        cell.artist.text = list[indexPath.row].artist as String?
+        cell.rank.textColor   = textColor
+        cell.music.text       = list[indexPath.row].music as String?
+        cell.music.textColor  = textColor
+        cell.artist.text      = list[indexPath.row].artist as String?
         cell.artist.textColor = textColor
         
         return cell
