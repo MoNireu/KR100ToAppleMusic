@@ -17,6 +17,7 @@
 		E11BCF4523BD9040000A0FB9 /* MusicChartListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */; };
 		E127B50723C9EA440023FF8C /* CustomToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127B50623C9EA440023FF8C /* CustomToolBarView.swift */; };
 		E1338EE923CC751B00DE9855 /* MusicSearchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1338EE823CC751B00DE9855 /* MusicSearchUtil.swift */; };
+		E14C69E223CD0B5300DA9A84 /* CreatePlaylistUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C69E123CD0B5300DA9A84 /* CreatePlaylistUtil.swift */; };
 		E16CE34223CCC310003BDECB /* ManualMusicSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16CE34123CCC310003BDECB /* ManualMusicSearchVC.swift */; };
 		E16CE34423CCD623003BDECB /* ManualSearchMusicInfoVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16CE34323CCD623003BDECB /* ManualSearchMusicInfoVO.swift */; };
 		E16CE34623CCDC4A003BDECB /* ManualMusicSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16CE34523CCDC4A003BDECB /* ManualMusicSearchCell.swift */; };
@@ -42,6 +43,7 @@
 		E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicChartListVC.swift; sourceTree = "<group>"; };
 		E127B50623C9EA440023FF8C /* CustomToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToolBarView.swift; sourceTree = "<group>"; };
 		E1338EE823CC751B00DE9855 /* MusicSearchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSearchUtil.swift; sourceTree = "<group>"; };
+		E14C69E123CD0B5300DA9A84 /* CreatePlaylistUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlaylistUtil.swift; sourceTree = "<group>"; };
 		E16CE34123CCC310003BDECB /* ManualMusicSearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualMusicSearchVC.swift; sourceTree = "<group>"; };
 		E16CE34323CCD623003BDECB /* ManualSearchMusicInfoVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualSearchMusicInfoVO.swift; sourceTree = "<group>"; };
 		E16CE34523CCDC4A003BDECB /* ManualMusicSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ManualMusicSearchCell.swift; path = Pods/ManualMusicSearchCell.swift; sourceTree = SOURCE_ROOT; };
@@ -148,6 +150,7 @@
 			children = (
 				E1AA588023BD9EF600A617F8 /* Utils.swift */,
 				E1338EE823CC751B00DE9855 /* MusicSearchUtil.swift */,
+				E14C69E123CD0B5300DA9A84 /* CreatePlaylistUtil.swift */,
 				E1AA587A23BD93F000A617F8 /* HTMLParser.swift */,
 			);
 			path = Utils;
@@ -273,6 +276,7 @@
 				E11BCF2C23BD8D61000A0FB9 /* AppDelegate.swift in Sources */,
 				E11BCF3623BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld in Sources */,
 				E11BCF4323BD9026000A0FB9 /* MusicChartListCell.swift in Sources */,
+				E14C69E223CD0B5300DA9A84 /* CreatePlaylistUtil.swift in Sources */,
 				E11BCF2E23BD8D61000A0FB9 /* SceneDelegate.swift in Sources */,
 				E16CE34423CCD623003BDECB /* ManualSearchMusicInfoVO.swift in Sources */,
 				E127B50723C9EA440023FF8C /* CustomToolBarView.swift in Sources */,

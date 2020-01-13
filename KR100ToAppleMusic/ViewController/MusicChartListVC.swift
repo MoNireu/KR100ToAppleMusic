@@ -36,6 +36,7 @@ class MusicChartListVC: UITableViewController, ModalHandler {
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     
     var sortedList: [MusicInfoVO]?
+    var finalList: [MusicInfoVO]?
     var sortStatus: SortStatus? = .showAll
     var isSearchComplete = false
     

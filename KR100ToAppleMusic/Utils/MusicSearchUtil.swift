@@ -25,7 +25,8 @@ class MusicSearchUtil: SKCloudServiceController {
         // 인증 상태 체크
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             print("Success: Already Authorized")
-            self.requestCountryCode(fail: fail, success: success, complete: complete)
+//            self.requestCountryCode(fail: fail, success: success, complete: complete)
+            self.startSearch(fail: fail, success: success, complete: complete)
             return
         }
         
@@ -43,7 +44,8 @@ class MusicSearchUtil: SKCloudServiceController {
                         // User Token 저장
                         tokenUtils.save("monireu.KR100ToAppleMusic", account: "userToken", value: userToken!)
                         print("Success : Requesting User Token.") // TEST - Status Code
-                        self.requestCountryCode(fail: fail, success: success, complete: complete)
+//                        self.requestCountryCode(fail: fail, success: success, complete: complete)
+                        self.startSearch(fail: fail, success: success, complete: complete)
                     }
                 } // END of self.requestUserToken() Closure
             default:
@@ -53,7 +55,8 @@ class MusicSearchUtil: SKCloudServiceController {
     }
     
     
-    func requestCountryCode(fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
+    func createURL(fail :((String)->Void)? = nil) -> String? {
+        let tokenUtils = TokenUtils()
         
         self.requestStorefrontCountryCode() { countryCode, err in
             if countryCode == nil {
@@ -62,44 +65,56 @@ class MusicSearchUtil: SKCloudServiceController {
                 fail?(msg)
             } else {
                 print("Success : Requesting CountryCode.") // TEST - Status Code
-                let tokenUtils = TokenUtils()
                 tokenUtils.save("monireu.KR100ToAppleMusic", account: "countryCode", value: countryCode!)
-                self.startSearch(fail: fail, success: success, complete: complete)
+//                self.startSearch(fail: fail, success: success, complete: complete)
             }
+        }
+        guard let countryCode = tokenUtils.load("monireu.KR100ToAppleMusic",account: "countryCode") else {
+            let msg = "국가 코드를 불러오는중 오류가 발생하였습니다."
+            fail?(msg)
+            print("ERROR: Failed loading storeFront")
+            return nil
+        }
+        let url = "https://api.music.apple.com/v1/catalog/\(countryCode)/search"
+        return url
+    }
+    
+    func createHeader(fail :((String)->Void)? = nil) -> HTTPHeaders? {
+        let tokenUtils = TokenUtils()
+        
+        if let userToken = tokenUtils.load("monireu.KR100ToAppleMusic",account: "userToken") {
+            let header: HTTPHeaders = [
+                "Music-User-Token" : "\(userToken)",
+                "Authorization": "Bearer \(devToken)"
+            ]
+            print(header)
+            return header
+        } else {
+            let msg = "유저 인증에 실패하였습니다."
+            fail?(msg)
+            print("ERROR: Failed loading userToken")
+            return nil
         }
     }
     
     
     // TODO: - Connect Request param with MusicInfoVO
     func startSearch(keyWord: String? = nil, fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
-        let tokenUtils = TokenUtils()
         
+        let url = createURL(fail: fail)
+        let header = createHeader(fail: fail)
         
-        guard let countryCode = tokenUtils.load("monireu.KR100ToAppleMusic",account: "countryCode") else {
-            let msg = "국가 코드를 불러오는중 오류가 발생하였습니다."
+        guard url != nil && header != nil else {
+            print("nil 값")
+            let msg = "잘못된 주소입니다."
             fail?(msg)
-            print("ERROR: Failed loading storeFront")
             return
         }
-        let url = "https://api.music.apple.com/v1/catalog/\(countryCode)/search"
         
-        guard let userToken = tokenUtils.load("monireu.KR100ToAppleMusic",account: "userToken") else {
-            let msg = "유저 인증에 실패하였습니다."
-            fail?(msg)
-            print("ERROR: Failed loading userToken")
-            return
-        }
-        let header: HTTPHeaders = [
-            "Music-User-Token" : "\(userToken)",
-            "Authorization": "Bearer \(devToken)"
-        ]
-        
-        print(header)
-       
         if keyWord == nil {
-            self.searchEachMusic(url: url, header: header, fail: fail, success: success, complete: complete)
+            self.searchEachMusic(url: url!, header: header!, fail: fail, success: success, complete: complete)
         } else {
-            self.searchOneMusic(url: url, header: header, keyWord: keyWord!, fail: fail, success: success, complete: complete)
+            self.searchOneMusic(url: url!, header: header!, keyWord: keyWord!, fail: fail, success: success, complete: complete)
         }
     }
     
