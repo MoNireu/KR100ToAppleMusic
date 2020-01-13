@@ -102,7 +102,7 @@ class MusicSearchUtil: SKCloudServiceController {
     
     func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
         // 이미 탐색 성공한 항목일 경우에는 재탐색에서 제외.
-        guard self.appdelegate.musicChartList[index].isSucceed == true else {
+        guard self.appdelegate.musicChartList[index].isSucceed != true else {
             index += 1
             return
         }

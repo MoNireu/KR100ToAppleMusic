@@ -12,7 +12,7 @@ import StoreKit
 import Alamofire
 
 extension UITableViewController {
-    func alert(_ message: String, completion: (()->Void)? = nil) {
+    func okAlert(_ message: String, completion: (()->Void)? = nil) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
             completion?()
@@ -25,6 +25,15 @@ extension UITableViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
             completion?()
         })
+        self.present(alert, animated: true)
+    }
+    
+    func alert(_ message: String, completion: (()->Void)? = nil) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
+            completion?()
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         self.present(alert, animated: true)
     }
 }

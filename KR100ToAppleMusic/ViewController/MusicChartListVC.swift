@@ -76,44 +76,44 @@ class MusicChartListVC: UITableViewController {
         
         // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
         if isSearchComplete == true {
+            // TODO: 탐색 완료 후 플레이스트 생성 로직
             return
         }
         // 로딩창 생성
-        self.showLoading()
-        
-        // 탐색 로직 시작
-        musicSearch.startSearching(
-            fail: { msg in
-                self.actIndicatorView?.stopAnimating()
-                self.errorAlert(msg) {
-                    self.hideLoading()
-                    self.createBtn.title = "재탐색"
-                    self.createBtn.isEnabled = true
+        self.alert("\(self.createBtn.title!)을 시작합니다.") {
+            self.showLoading()
+            // 탐색 로직 시작
+            self.musicSearch.startSearching(
+                fail: { msg in
+                    self.actIndicatorView?.stopAnimating()
+                    self.errorAlert(msg) {
+                        self.hideLoading()
+                        self.createBtn.title = "재탐색"
+                        self.createBtn.isEnabled = true
+                    }
+                },
+                success: { count in
+                    self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
+                    self.progressLabel?.sizeToFit()
+                    self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
+                    
+                    self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
+                },
+                complete: { msg in
+                    self.actIndicatorView?.stopAnimating()
+                    
+                    self.okAlert("음악 탐색 완료") {
+                        self.hideLoading()
+                        self.createBtn.title = "트랙 생성"
+                        self.createBtn.isEnabled = true
+                        self.sortBtn.isEnabled = true
+                        self.sortBtn.tintColor = .systemBlue
+                        self.isSearchComplete = true
+                        self.tableView.reloadData()
+                    }
                 }
-            },
-            success: { count in
-                self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
-                self.progressLabel?.sizeToFit()
-                self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
-                
-                self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
-            },
-            complete: { msg in
-            self.actIndicatorView?.stopAnimating()
-            
-            let alert = UIAlertController(title: "음악 탐색 완료", message: msg, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default){ _ in
-                self.hideLoading()
-                self.createBtn.title = "트랙 생성"
-                self.createBtn.isEnabled = true
-                self.sortBtn.isEnabled = true
-                self.sortBtn.tintColor = .systemBlue
-                self.isSearchComplete = true
-                self.tableView.reloadData()
-            })
-            self.present(alert, animated: true)
-            }
-        )
+            )
+        }
     }
     
     
@@ -127,7 +127,7 @@ class MusicChartListVC: UITableViewController {
         
         htmlParser.parseResult(
             success: {
-                self.alert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
+                self.okAlert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH"
@@ -137,7 +137,7 @@ class MusicChartListVC: UITableViewController {
                 self.tableView.reloadData()
             },
             fail: { msg in
-                self.alert(msg)
+                self.errorAlert(msg)
             }
         )
     }
