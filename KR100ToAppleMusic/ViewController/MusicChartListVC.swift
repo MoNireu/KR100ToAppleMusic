@@ -34,7 +34,7 @@ class MusicChartListVC: UITableViewController {
     
     
     @IBAction func sortAction(_ sender: Any) {
-        let alert = UIAlertController(title: "test", message: "test", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "모두 보기", style: .default) { _ in
