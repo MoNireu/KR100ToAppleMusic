@@ -55,8 +55,8 @@ extension UIViewController {
         self.present(alert, animated: true)
     }
     
-    func alert(_ message: String, completion: (()->Void)? = nil) {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+    func alert(title:String? = nil, message: String? = nil, completion: (()->Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default){ (_) in
             completion?()
         })

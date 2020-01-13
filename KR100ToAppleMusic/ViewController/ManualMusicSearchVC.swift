@@ -16,6 +16,7 @@ class ManualMusicSearchVC: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
+    var delegate: MusicChartListVC?
     
     var manualSearchMusicInfoList = [ManualSearchMusicInfoVO]()
     var music: String?
@@ -34,8 +35,8 @@ class ManualMusicSearchVC: UIViewController {
         self.view.bringSubviewToFront(activityIndicator)
         self.activityIndicator.startAnimating()
 
-        musicLbl.text  = music
-        artistLbl.text = artist
+        musicLbl.text   = music
+        artistLbl.text  = artist
         keywordLbl.text = "\"\(keyword!)\" 검색결과"
         
         let url = URL(string: "https://" + melonAlbumImageURL!)
@@ -84,7 +85,17 @@ extension ManualMusicSearchVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        let music  = manualSearchMusicInfoList[indexPath.row].music
+        let artist = manualSearchMusicInfoList[indexPath.row].artist
+        
+        self.alert(title: "해당 곡을 선택하시겠습니까?", message: "\(music!)\n\(artist!)") {
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
+            appdelegate.musicChartList[self.originIndex!].musicID = self.manualSearchMusicInfoList[indexPath.row].musicID
+            appdelegate.musicChartList[self.originIndex!].isSucceed = true
+            self.dismiss(animated: true) {
+                self.delegate?.modalDismissed()
+            }
+        }
     }
     
     

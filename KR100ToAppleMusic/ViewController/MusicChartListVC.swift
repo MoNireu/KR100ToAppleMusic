@@ -14,9 +14,13 @@ enum SortStatus: Int {
     case showFail = 2
 }
 
+protocol ModalHandler {
+    func modalDismissed()
+}
 
-class MusicChartListVC: UITableViewController {
-    
+
+class MusicChartListVC: UITableViewController, ModalHandler {
+
     @IBOutlet var createBtn: UIBarButtonItem!
     @IBOutlet var sortBtn: UIBarButtonItem!
     
@@ -46,23 +50,11 @@ class MusicChartListVC: UITableViewController {
         })
         
         alert.addAction(UIAlertAction(title: "성공한 항목", style: .default) { _ in
-            self.sortedList = [MusicInfoVO]()
-            for list in self.appdelegate.musicChartList {
-                if list.isSucceed == true {
-                    self.sortedList?.append(list)
-                }
-            }
             self.sortStatus = .showSuccess
             self.tableView.reloadData()
         })
         
         alert.addAction(UIAlertAction(title: "실패한 항목", style: .destructive) { _ in
-            self.sortedList = [MusicInfoVO]()
-            for list in self.appdelegate.musicChartList {
-                if list.isSucceed == false {
-                    self.sortedList?.append(list)
-                }
-            }
             self.sortStatus = .showFail
             self.tableView.reloadData()
         })
@@ -80,7 +72,7 @@ class MusicChartListVC: UITableViewController {
             return
         }
         
-        self.alert("\(self.createBtn.title!)을 시작합니다.") {
+        self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
             // 로딩창 생성
             self.showLoading()
             // 탐색 로직 시작
@@ -149,6 +141,7 @@ class MusicChartListVC: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
+        print("===============appear")
     }
     
     
@@ -192,12 +185,34 @@ class MusicChartListVC: UITableViewController {
     }
     
     
+    func sortList(isSucceed: Bool) {
+        self.sortedList = [MusicInfoVO]()
+        for list in self.appdelegate.musicChartList {
+            if isSucceed == true {
+                if list.isSucceed == true {
+                    self.sortedList?.append(list)
+                }
+            } else {
+                if list.isSucceed == false {
+                    self.sortedList?.append(list)
+                }
+            }
+        }
+    }
+    
+    func modalDismissed() {
+        self.tableView.reloadData()
+    }
+    
+    
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch sortStatus {
         case .showSuccess:
+            sortList(isSucceed: true)
             return self.sortedList!.count
         case .showFail:
+            sortList(isSucceed: false)
             return self.sortedList!.count
         default:
          return appdelegate.musicChartList.count
@@ -213,8 +228,10 @@ class MusicChartListVC: UITableViewController {
         
         switch self.sortStatus {
         case .showSuccess:
+            sortList(isSucceed: true)
             cell = makeCell(cell, list: self.sortedList!, indexPath: indexPath)
         case .showFail:
+            sortList(isSucceed: false)
             cell = makeCell(cell, list: self.sortedList!, indexPath: indexPath, textColor: .red)
         default:
             let isCellSucceed = appdelegate.musicChartList[indexPath.row].isSucceed
@@ -256,10 +273,11 @@ class MusicChartListVC: UITableViewController {
             
             let manualMusicSearchVC = self.storyboard?.instantiateViewController(identifier: "manual_music_search") as! ManualMusicSearchVC
             
-            manualMusicSearchVC.music              = selectedMusicTitle
-            manualMusicSearchVC.artist             = selectedMusicArtist
-            manualMusicSearchVC.keyword            = alert.textFields?.first!.text
-            manualMusicSearchVC.originIndex        = originIndex
+            manualMusicSearchVC.music       = selectedMusicTitle
+            manualMusicSearchVC.artist      = selectedMusicArtist
+            manualMusicSearchVC.keyword     = alert.textFields?.first!.text
+            manualMusicSearchVC.originIndex = originIndex
+            manualMusicSearchVC.delegate    = self
             manualMusicSearchVC.melonAlbumImageURL = self.appdelegate.musicChartList[originIndex].melonAlbumImg
 
             self.present(manualMusicSearchVC, animated: true)
