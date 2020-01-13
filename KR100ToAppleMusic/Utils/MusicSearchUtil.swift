@@ -99,9 +99,9 @@ class MusicSearchUtil: SKCloudServiceController {
     
     
     func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((Float)->Void)? = nil, complete: ((String)->Void)? = nil) {
-        
-        let modifiedArtistString = modifyString(string: HTMLParser.musicChartList[index].artist)
-        let modifiedMusicString  = modifyString(string: HTMLParser.musicChartList[index].music)
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        let modifiedArtistString = modifyString(string: appdelegate.musicChartList[index].artist)
+        let modifiedMusicString  = modifyString(string: appdelegate.musicChartList[index].music)
         let musicInfoString: String = modifiedMusicString + " " + modifiedArtistString
         
         let param : [String : String] = [
@@ -130,21 +130,21 @@ class MusicSearchUtil: SKCloudServiceController {
             // 검색 성공
             if let songId = dataObject?["id"] as? String {
                 print("\(self.index+1)위 : \(songId)")
-                HTMLParser.musicChartList[self.index].isSucceed = true
+                appdelegate.musicChartList[self.index].isSucceed = true
                 self.index += 1
                 success?(Float(self.index))
                 // 검색 실패
             } else {
                 print("\(self.index+1)위 : 검색결과없음")
-                HTMLParser.musicChartList[self.index].isSucceed = false
+                appdelegate.musicChartList[self.index].isSucceed = false
                 self.index += 1
                 self.failCount += 1
                 success?(Float(self.index))
             }
             
             // 탐색 종료
-            guard self.index < HTMLParser.musicChartList.count else {
-                let msg = "총 \(HTMLParser.musicChartList.count)곡의 탐색이 완료되었습니다.\n성공 : \(HTMLParser.musicChartList.count - self.failCount)\n실패 : \(self.failCount)"
+            guard self.index < appdelegate.musicChartList.count else {
+                let msg = "총 \(appdelegate.musicChartList.count)곡의 탐색이 완료되었습니다.\n성공 : \(appdelegate.musicChartList.count - self.failCount)\n실패 : \(self.failCount)"
                 complete?(msg)
                 print("탐색 종료\n실패 : \(self.failCount)개")
                 self.failCount = 0

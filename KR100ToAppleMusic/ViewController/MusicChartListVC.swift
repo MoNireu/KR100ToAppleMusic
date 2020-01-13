@@ -29,8 +29,10 @@ class MusicChartListVC: UITableViewController {
     let htmlParser = HTMLParser()
     let musicSearch = MusicSearchUtil()
     let tokenUtils = TokenUtils()
-    var sortStatus: SortStatus? = .showAll
+    let appdelegate = UIApplication.shared.delegate as! AppDelegate
+    
     var sortedList: [MusicInfoVO]?
+    var sortStatus: SortStatus? = .showAll
     var isSearchComplete = false
     
     
@@ -45,7 +47,7 @@ class MusicChartListVC: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "성공한 항목", style: .default) { _ in
             self.sortedList = [MusicInfoVO]()
-            for list in HTMLParser.musicChartList {
+            for list in self.appdelegate.musicChartList {
                 if list.isSucceed == true {
                     self.sortedList?.append(list)
                 }
@@ -56,7 +58,7 @@ class MusicChartListVC: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "실패한 항목", style: .destructive) { _ in
             self.sortedList = [MusicInfoVO]()
-            for list in HTMLParser.musicChartList {
+            for list in self.appdelegate.musicChartList {
                 if list.isSucceed == false {
                     self.sortedList?.append(list)
                 }
@@ -90,11 +92,11 @@ class MusicChartListVC: UITableViewController {
                 }
             },
             success: { count in
-                self.progressLabel?.text     = "총 \(HTMLParser.musicChartList.count)곡 중 \(Int(count))곡 완료 "
+                self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
                 self.progressLabel?.sizeToFit()
                 self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
                 
-                self.progressBar?.setProgress((count / Float(HTMLParser.musicChartList.count)), animated: true)
+                self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
             },
             complete: { msg in
             self.actIndicatorView?.stopAnimating()
@@ -119,12 +121,13 @@ class MusicChartListVC: UITableViewController {
         super.viewDidLoad()
         
         self.sortBtn.tintColor = .clear
-        
         self.navigationController?.toolbar.isHidden = true
+        
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
         
         htmlParser.parseResult(
             success: {
-                self.alert("총 \(HTMLParser.musicChartList.count)개의 불러오기를 성공했습니다.")
+                self.alert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "HH"
@@ -151,7 +154,7 @@ class MusicChartListVC: UITableViewController {
         
         let objectBetweenInterval = 10
         progressLabel                = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        progressLabel?.text          = "총 \(HTMLParser.musicChartList.count)곡 중 0곡 완료 "
+        progressLabel?.text          = "총 \(appdelegate.musicChartList.count)곡 중 0곡 완료 "
         progressLabel?.sizeToFit()
         progressLabel?.center.x      = (self.customToolBarView?.center.x)!
         progressLabel?.center.y      = self.customToolBarView!.center.y - CGFloat(objectBetweenInterval)
@@ -193,7 +196,7 @@ class MusicChartListVC: UITableViewController {
         case .showFail:
             return self.sortedList!.count
         default:
-         return HTMLParser.musicChartList.count
+         return appdelegate.musicChartList.count
         }
     }
     
@@ -211,12 +214,12 @@ class MusicChartListVC: UITableViewController {
         case .showFail:
             cell = makeCell(cell, list: self.sortedList!, indexPath: indexPath, textColor: .red)
         default:
-            let isCellSucceed = HTMLParser.musicChartList[indexPath.row].isSucceed
+            let isCellSucceed = appdelegate.musicChartList[indexPath.row].isSucceed
             
             if isCellSucceed == true || isCellSucceed == nil {
-                cell = makeCell(cell, list: HTMLParser.musicChartList, indexPath: indexPath)
+                cell = makeCell(cell, list: appdelegate.musicChartList, indexPath: indexPath)
             } else {
-                cell = makeCell(cell, list: HTMLParser.musicChartList, indexPath: indexPath, textColor: .red)
+                cell = makeCell(cell, list: appdelegate.musicChartList, indexPath: indexPath, textColor: .red)
             }
         }
         return cell

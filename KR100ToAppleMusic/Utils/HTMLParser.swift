@@ -13,7 +13,7 @@ import SwiftSoup
 
 class HTMLParser {
     
-    static var musicChartList = [MusicInfoVO]()
+//    static var musicChartList = [MusicInfoVO]()
     
     func parseResult(success: (()->Void)? = nil, fail: ((String)->Void)? = nil){
         
@@ -32,6 +32,7 @@ class HTMLParser {
         
         req.responseString() { res in
             let html = res.value
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
             
             do {
                 let doc: Document = try SwiftSoup.parseBodyFragment(html!)
@@ -47,10 +48,10 @@ class HTMLParser {
                     musicInfoObject.music = try title.get(i).text()
                     musicInfoObject.artist = try artist.get(i).text()
                     //
-                    HTMLParser.musicChartList.append(musicInfoObject)
+                    appdelegate.musicChartList.append(musicInfoObject)
                 }
                 
-                for vo in HTMLParser.musicChartList {
+                for vo in appdelegate.musicChartList {
                     print("\(vo.rank!) / \(vo.artist!) / \(vo.music!)")
                 }
             } catch Exception.Error(let type, let message) {
