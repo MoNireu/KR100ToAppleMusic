@@ -70,12 +70,43 @@ class MusicChartListVC: UITableViewController, ModalHandler {
         // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
         if isSearchComplete == true {
             // TODO: 탐색 완료 후 플레이스트 생성 로직
+            let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
+            alert.addTextField() {tf in tf.placeholder = "플레이리스트 제목"}
+            alert.addTextField() {tf in tf.placeholder = "플레이리스트 설명"}
+            alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+                let playListName = alert.textFields?.first?.text
+                let playListDesc = alert.textFields?.last?.text
+                
+                if (playListName == nil || playListName!.isEmpty == true) && (playListDesc == nil || playListDesc!.isEmpty == true){
+                    self.errorAlert("플레이리스트 제목과 설명을 입력해주세요.") {self.present(alert, animated: true)}
+                }else if playListName == nil || playListName!.isEmpty == true {
+                    self.errorAlert("플레이리스트 제목을 입력해주세요.") {self.present(alert, animated: true)}
+                } else if playListDesc == nil || playListDesc!.isEmpty == true {
+                    self.errorAlert("플레이리스트 설명을 입력해주세요.") {self.present(alert, animated: true)}
+                } else {
+                    self.sortList(isSucceed: true)
+                    print("##############\(self.sortedList!)")
+                    self.musicSearch.createPlayList(
+                        list: self.sortedList!,
+                        name: playListName!,
+                        desc: playListDesc!,
+                        fail: {msg in self.errorAlert(msg){
+                            self.createBtn.isEnabled = true
+                            }
+                        },
+                        success: {msg in self.okAlert(msg){
+                            self.createBtn.isEnabled = true
+                            }
+                        }
+                    )
+                }
+            })
+            self.present(alert, animated: true)
             return
         }
         
         self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
-            // 로딩창 생성
-            self.showLoading()
             // 탐색 로직 시작
             self.musicSearch.startSearching(
                 fail: { msg in
@@ -109,6 +140,8 @@ class MusicChartListVC: UITableViewController, ModalHandler {
                     }
                 }
             )
+            // 로딩창 생성
+            self.showLoading()
         }
     }
     
@@ -183,6 +216,7 @@ class MusicChartListVC: UITableViewController, ModalHandler {
         progressLabel = nil
         progressBar = nil
         actIndicatorView = nil
+        customToolBarView = nil
     }
     
     

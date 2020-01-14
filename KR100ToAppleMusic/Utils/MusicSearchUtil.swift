@@ -15,7 +15,7 @@ import Alamofire
 class MusicSearchUtil: SKCloudServiceController {
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     
-    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4OTA5MTg5LCJleHAiOjE1Nzg5NTIzODl9.MtOcrMJeQCig25vp3EVEIRNaxbzkh23J4hD0J31yL5e8H1S1YPO0xgYEGWYhT1HtEPB8pwPFkOStRLTrnCMpdA"
+    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4OTUzMTQzLCJleHAiOjE1Nzg5OTYzNDN9.C9SHLUnO1CwoIaBez_7zDmccde4dvXEszxOmhReMyPyGgmU9xyvaBlU3Ze7CsTOJwQ3fAg4zcMVvM056Q2Q3oA"
     
     var index = 0
     var failCount = 0
@@ -235,6 +235,49 @@ class MusicSearchUtil: SKCloudServiceController {
             let msg = "완료"
             complete?(msg)
         }
+    }
+    
+    func createFinalList(list: [MusicInfoVO]) -> NSMutableArray {
+        let resultArray: NSMutableArray = []
+        for object in list {
+            let data = ["id" : object.musicID!, "type" : "songs"]
+            print("!@#$\(data)")
+            resultArray.add(data)
+        }
+        return resultArray
+    }
+    
+    func createPlayList(list: [MusicInfoVO], name: String, desc: String, fail: ((String)->Void)? = nil, success: ((String)->Void)? = nil) {
+        let url = "https://api.music.apple.com/v1/me/library/playlists"
+        let header = createHeader()
+        let data = createFinalList(list: list)
+        print("********************* \(data)")
+        let param: Parameters = [
+            "attributes" : [
+                "name" : name,
+                "description" : desc
+            ],
+            "relationships" : [
+                "tracks" : [
+                    "data" : data
+                ]
+            ]
+        ]
+        
+        let request = AF.request(url, method: .post, parameters: param, encoding: JSONEncoding.default, headers: header)
+        
+        request.responseJSON() { res in
+            let statusCode = res.response?.statusCode
+            print(statusCode!)
+            if statusCode == 201 {
+                let msg = "플레이리스트 생성을 완료했습니다."
+                success?(msg)
+            } else {
+                let msg = "플레이리스트 생성 도중 문제가 발생하였습니다."
+                fail?(msg)
+            }
+        }
+        
     }
     
     func modifyString(string: String?) -> String {
