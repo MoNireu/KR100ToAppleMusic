@@ -19,7 +19,7 @@ protocol ModalHandler {
 }
 
 
-class MusicChartListVC: UITableViewController, ModalHandler {
+class MusicChartListVC: UITableViewController {
 
     @IBOutlet var createBtn: UIBarButtonItem!
     @IBOutlet var sortBtn: UIBarButtonItem!
@@ -237,10 +237,6 @@ class MusicChartListVC: UITableViewController, ModalHandler {
         }
     }
     
-    func modalDismissed() {
-        self.tableView.reloadData()
-    }
-    
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -333,5 +329,12 @@ class MusicChartListVC: UITableViewController, ModalHandler {
         cell.artist.textColor = textColor
         
         return cell
+    }
+}
+
+
+extension MusicChartListVC: ModalHandler {
+    func modalDismissed() {
+        self.tableView.reloadData()
     }
 }
