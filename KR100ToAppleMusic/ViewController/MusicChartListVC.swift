@@ -37,9 +37,19 @@ class MusicChartListVC: UITableViewController {
     
     var sortedList: [MusicInfoVO]?
     var finalList: [MusicInfoVO]?
+    
     var sortStatus: SortStatus? = .showAll
     var isSearchComplete = false
-    
+    let currentDate : String = {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        return df.string(from: Date())
+    }()
+    let currentTime: String = {
+        let df = DateFormatter()
+        df.dateFormat = "HH:00"
+        return df.string(from: Date())
+    }()
     
     @IBAction func sortAction(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -71,8 +81,15 @@ class MusicChartListVC: UITableViewController {
         if isSearchComplete == true {
             // TODO: 탐색 완료 후 플레이스트 생성 로직
             let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
-            alert.addTextField() {tf in tf.placeholder = "플레이리스트 제목"}
-            alert.addTextField() {tf in tf.placeholder = "플레이리스트 설명"}
+            alert.addTextField() {tf in
+                tf.placeholder = "플레이리스트 제목"
+                tf.text = "Melon \(self.currentDate)"
+            }
+            alert.addTextField() {tf in
+                tf.placeholder = "플레이리스트 설명"
+                tf.text = "\(self.currentDate) \(self.currentTime)에 생성됨."
+            }
+            
             alert.addAction(UIAlertAction(title: "취소", style: .cancel))
             alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
                 let playListName = alert.textFields?.first?.text
