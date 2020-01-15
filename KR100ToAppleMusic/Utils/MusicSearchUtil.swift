@@ -15,7 +15,7 @@ import Alamofire
 class MusicSearchUtil: SKCloudServiceController {
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     
-    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc4OTUzMTQzLCJleHAiOjE1Nzg5OTYzNDN9.C9SHLUnO1CwoIaBez_7zDmccde4dvXEszxOmhReMyPyGgmU9xyvaBlU3Ze7CsTOJwQ3fAg4zcMVvM056Q2Q3oA"
+    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc5MDc5OTg4LCJleHAiOjE1NzkxMjMxODh9.zK6kSxzW-8pXXXYSqgk4Nn5SS5Ht6FSOf2-32RFsKPj7c3lPZfFXPtTnd_WniD3A3BmmnhZm_uxwhvA8E7cpng"
     
     var index = 0
     var failCount = 0
@@ -227,7 +227,7 @@ class MusicSearchUtil: SKCloudServiceController {
                 manualSearchMusicInfo.music   = music
                 manualSearchMusicInfo.imgURL  = imgURL
                 
-                let img = URL(string: imgURL + "50x50bb.jpeg")
+                let img = URL(string: imgURL + "75x75bb.jpeg")
                 manualSearchMusicInfo.img = try! UIImage(data: Data(contentsOf: img!))
                 
                 success?(manualSearchMusicInfo)
