@@ -145,11 +145,11 @@ class MusicChartListVC: UITableViewController, ModalHandler {
         }
     }
     
-    
+    // MARK: View CallBack Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.allowsSelection = true
+        self.tableView.allowsSelection = false
         self.sortBtn.tintColor = .clear
         self.navigationController?.toolbar.isHidden = true
         
@@ -179,6 +179,7 @@ class MusicChartListVC: UITableViewController, ModalHandler {
     }
     
     
+    // MARK: ToolBar Loading View Methods
     func showLoading() {
         self.navigationController?.toolbar.isHidden = false
         customToolBarView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: (self.navigationController?.toolbar.frame.height)!))
@@ -220,6 +221,7 @@ class MusicChartListVC: UITableViewController, ModalHandler {
     }
     
     
+    // MARK: Other Methods
     func sortList(isSucceed: Bool) {
         self.sortedList = [MusicInfoVO]()
         for list in self.appdelegate.musicChartList {
