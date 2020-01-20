@@ -40,6 +40,7 @@ class MusicChartListVC: UITableViewController {
     
     var sortStatus: SortStatus? = .showAll
     var isSearchComplete = false
+    var latestTime: String?
     let currentDate : String = {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
@@ -75,21 +76,12 @@ class MusicChartListVC: UITableViewController {
     
     
     @IBAction func createAction(_ sender: Any) {
-        self.createBtn.isEnabled = false
         
         // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
         if isSearchComplete == true {
-            // TODO: 탐색 완료 후 플레이스트 생성 로직
             let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
-            alert.addTextField() {tf in
-                tf.placeholder = "플레이리스트 제목"
-                tf.text = "Melon \(self.currentDate)"
-            }
-            alert.addTextField() {tf in
-                tf.placeholder = "플레이리스트 설명"
-                tf.text = "\(self.currentDate) \(self.currentTime)에 생성됨."
-            }
-            
+            alert.addTextField() {tf in tf.placeholder = "플레이리스트 제목"}
+            alert.addTextField() {tf in tf.placeholder = "플레이리스트 설명"}
             alert.addAction(UIAlertAction(title: "취소", style: .cancel))
             alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
                 let playListName = alert.textFields?.first?.text
@@ -108,57 +100,60 @@ class MusicChartListVC: UITableViewController {
                         list: self.sortedList!,
                         name: playListName!,
                         desc: playListDesc!,
-                        fail: {msg in self.errorAlert(msg){
+                        fail: {msg in
+                            self.errorAlert(msg) {
                             self.createBtn.isEnabled = true
                             }
-                        },
-                        success: {msg in self.okAlert(msg){
+                        }, // END of fail:
+                        success: {msg in
+                            self.okAlert(msg) {
                             self.createBtn.isEnabled = true
                             }
-                        }
-                    )
-                }
-            })
+                        } // END of success:
+                    ) // END of self.musicSearch.createPlayList CLOSURE
+                } // END of if-else Statement
+            }) // END of alert.addAction("확인")
             self.present(alert, animated: true)
-            return
         }
         
-        self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
-            // 탐색 로직 시작
-            self.musicSearch.startSearching(
-                fail: { msg in
-                    self.actIndicatorView?.stopAnimating()
-                    self.errorAlert(msg) {
-                        self.hideLoading()
-                        self.createBtn.title = "재탐색"
-                        self.createBtn.isEnabled = true
+        else {
+            self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
+                // 탐색 로직 시작
+                self.createBtn.isEnabled = false
+                self.musicSearch.startSearching(
+                    fail: { msg in
+                        self.actIndicatorView?.stopAnimating()
+                        self.errorAlert(msg) {
+                            self.hideLoading()
+                            self.createBtn.title = "재탐색"
+                            self.createBtn.isEnabled = true
+                        }
+                    },
+                    success: { cnt in
+                        let count = cnt as! Float
+                        self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
+                        self.progressLabel?.sizeToFit()
+                        self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
+                        
+                        self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
+                    },
+                    complete: { msg in
+                        self.actIndicatorView?.stopAnimating()
+                        
+                        self.okAlert("\(msg)") {
+                            self.hideLoading()
+                            self.createBtn.title     = "트랙 생성"
+                            self.createBtn.isEnabled = true
+                            self.sortBtn.isEnabled   = true
+                            self.sortBtn.tintColor   = .systemBlue
+                            self.isSearchComplete    = true
+                            self.tableView.allowsSelection = true
+                            self.tableView.reloadData()
+                        }
                     }
-                },
-                success: { cnt in
-                    let count = cnt as! Float
-                    self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
-                    self.progressLabel?.sizeToFit()
-                    self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
-                    
-                    self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
-                },
-                complete: { msg in
-                    self.actIndicatorView?.stopAnimating()
-                    
-                    self.okAlert("\(msg)") {
-                        self.hideLoading()
-                        self.createBtn.title     = "트랙 생성"
-                        self.createBtn.isEnabled = true
-                        self.sortBtn.isEnabled   = true
-                        self.sortBtn.tintColor   = .systemBlue
-                        self.isSearchComplete    = true
-                        self.tableView.allowsSelection = true
-                        self.tableView.reloadData()
-                    }
-                }
-            )
-            // 로딩창 생성
-            self.showLoading()
+                )
+                self.showLoading()
+            }
         }
     }
     
@@ -170,21 +165,22 @@ class MusicChartListVC: UITableViewController {
         self.sortBtn.tintColor = .clear
         self.navigationController?.toolbar.isHidden = true
         
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
+        self.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
+        
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         
         htmlParser.parseResult(
             success: {
                 self.okAlert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "HH"
-                let currentHour = dateFormatter.string(from: Date())
-                self.navigationItem.title = "\(currentHour):00 집계"
-                
+                self.latestTime = self.currentTime
+                self.navigationItem.title = "\(self.currentTime) 집계"
                 self.tableView.reloadData()
             },
             fail: { msg in
                 self.errorAlert(msg)
+                self.errorAlert("음악을 불러오는데 실패했습니다.")
             }
         )
     }
@@ -192,7 +188,6 @@ class MusicChartListVC: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
-        print("===============appear")
     }
     
     
@@ -235,6 +230,30 @@ class MusicChartListVC: UITableViewController {
         progressBar = nil
         actIndicatorView = nil
         customToolBarView = nil
+    }
+    
+    @objc func pullToRefresh(_ sender: Any) {
+        guard self.currentTime != latestTime! else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        appdelegate.musicChartList = []
+        
+        htmlParser.parseResult(
+            success: {
+                self.okAlert("\(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
+                self.navigationItem.title = "\(self.currentTime) 집계"
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
+            },
+            fail: { msg in
+                self.errorAlert(msg)
+                self.errorAlert("음악을 불러오는데 실패했습니다.")
+                self.refreshControl?.endRefreshing()
+            }
+        )
     }
     
     

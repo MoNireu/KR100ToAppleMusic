@@ -15,7 +15,8 @@ import Alamofire
 class MusicSearchUtil: SKCloudServiceController {
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     
-    let devToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ3NVlHSDc4ODcifQ.eyJpc3MiOiJUQldRVFk5UFZVIiwiaWF0IjoxNTc5MDc5OTg4LCJleHAiOjE1NzkxMjMxODh9.zK6kSxzW-8pXXXYSqgk4Nn5SS5Ht6FSOf2-32RFsKPj7c3lPZfFXPtTnd_WniD3A3BmmnhZm_uxwhvA8E7cpng"
+    let tokenUtils = TokenUtils()
+    lazy var devToken = self.tokenUtils.load("monireu.KR100ToAppleMusic", account: "devToken")
     
     var index = 0
     var failCount = 0
@@ -25,7 +26,6 @@ class MusicSearchUtil: SKCloudServiceController {
         // 인증 상태 체크
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             print("Success: Already Authorized")
-//            self.requestCountryCode(fail: fail, success: success, complete: complete)
             self.startSearch(fail: fail, success: success, complete: complete)
             return
         }
@@ -34,15 +34,14 @@ class MusicSearchUtil: SKCloudServiceController {
         SKCloudServiceController.requestAuthorization { authorizationStatus in
             switch authorizationStatus {
             case .authorized:
-                self.requestUserToken(forDeveloperToken: self.devToken) { userToken, err in
+                self.requestUserToken(forDeveloperToken: self.devToken!) { userToken, err in
                     if userToken == nil {
                         print("Error: Requesting User Token. Details - \(err!)") // TEST - Status Code
                         let msg = "인증 과정에서 오류가 발생하였습니다."
                         fail?(msg)
                     } else {
-                        let tokenUtils = TokenUtils()
                         // User Token 저장
-                        tokenUtils.save("monireu.KR100ToAppleMusic", account: "userToken", value: userToken!)
+                        self.tokenUtils.save("monireu.KR100ToAppleMusic", account: "userToken", value: userToken!)
                         print("Success : Requesting User Token.") // TEST - Status Code
 //                        self.requestCountryCode(fail: fail, success: success, complete: complete)
                         self.startSearch(fail: fail, success: success, complete: complete)
@@ -85,7 +84,7 @@ class MusicSearchUtil: SKCloudServiceController {
         if let userToken = tokenUtils.load("monireu.KR100ToAppleMusic",account: "userToken") {
             let header: HTTPHeaders = [
                 "Music-User-Token" : "\(userToken)",
-                "Authorization": "Bearer \(devToken)"
+                "Authorization": "Bearer \(devToken!)"
             ]
             print(header)
             return header
@@ -111,6 +110,7 @@ class MusicSearchUtil: SKCloudServiceController {
             return
         }
         
+        // 이부분 searchMusic으로 옮기고 삭제하기
         if keyWord == nil {
             self.searchEachMusic(url: url!, header: header!, fail: fail, success: success, complete: complete)
         } else {
@@ -120,6 +120,9 @@ class MusicSearchUtil: SKCloudServiceController {
     
     
     func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
+        
+
+        
         // 이미 탐색 성공한 항목일 경우에는 재탐색에서 제외.
         guard self.appdelegate.musicChartList[index].isSucceed != true else {
             index += 1
@@ -275,6 +278,7 @@ class MusicSearchUtil: SKCloudServiceController {
             } else {
                 let msg = "플레이리스트 생성 도중 문제가 발생하였습니다."
                 fail?(msg)
+                print(res)
             }
         }
         
