@@ -136,6 +136,8 @@ class MusicChartListVC: UITableViewController {
                         self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
                         
                         self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
+                        
+                        self.tableView.reloadData()
                     },
                     complete: { msg in
                         self.actIndicatorView?.stopAnimating()
@@ -244,6 +246,7 @@ class MusicChartListVC: UITableViewController {
         htmlParser.parseResult(
             success: {
                 self.okAlert("\(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
+                self.latestTime = self.currentTime
                 self.navigationItem.title = "\(self.currentTime) 집계"
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
@@ -260,14 +263,14 @@ class MusicChartListVC: UITableViewController {
     // MARK: Other Methods
     func sortList(isSucceed: Bool) {
         self.sortedList = [MusicInfoVO]()
-        for list in self.appdelegate.musicChartList {
+        for item in self.appdelegate.musicChartList {
             if isSucceed == true {
-                if list.isSucceed == true {
-                    self.sortedList?.append(list)
+                if item.isSucceed == true {
+                    self.sortedList?.append(item)
                 }
             } else {
-                if list.isSucceed == false {
-                    self.sortedList?.append(list)
+                if item.isSucceed == false {
+                    self.sortedList?.append(item)
                 }
             }
         }
@@ -300,11 +303,11 @@ class MusicChartListVC: UITableViewController {
         switch self.sortStatus {
         case .showSuccess:
             sortList(isSucceed: true)
-            cell = makeCell(cell, row: row)
+            cell = makeCell(cell, row: (self.sortedList?[indexPath.row])!)
             cell.failIndicator.isHidden = true
         case .showFail:
             sortList(isSucceed: false)
-            cell = makeCell(cell, row: row, textColor: .systemGray)
+            cell = makeCell(cell, row: (self.sortedList?[indexPath.row])!, textColor: .systemGray)
             cell.failIndicator.isHidden = false
         case .showAll:
             let isCellSucceed = row.isSucceed
@@ -319,8 +322,6 @@ class MusicChartListVC: UITableViewController {
         default:
             break
         }
-        
-        
         
         return cell
     }
