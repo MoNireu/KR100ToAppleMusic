@@ -112,7 +112,9 @@ class MusicSearchUtil: SKCloudServiceController {
         
         // 이부분 searchMusic으로 옮기고 삭제하기
         if keyWord == nil {
-            self.searchEachMusic(url: url!, header: header!, fail: fail, success: success, complete: complete)
+            DispatchQueue.global(qos: .background).async {
+                self.searchEachMusic(url: url!, header: header!, fail: fail, success: success, complete: complete)
+            }
         } else {
             self.searchOneMusic(url: url!, header: header!, keyWord: keyWord!, fail: fail, success: success, complete: complete)
         }
@@ -120,8 +122,6 @@ class MusicSearchUtil: SKCloudServiceController {
     
     
     func searchEachMusic(url: String, header: HTTPHeaders, fail :((String)->Void)? = nil, success :((AnyObject)->Void)? = nil, complete: ((String)->Void)? = nil) {
-        
-
         
         // 이미 탐색 성공한 항목일 경우에는 재탐색에서 제외.
         guard self.appdelegate.musicChartList[index].isSucceed != true else {

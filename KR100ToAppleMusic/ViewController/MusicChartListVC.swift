@@ -38,15 +38,15 @@ class MusicChartListVC: UITableViewController {
     var sortedList: [MusicInfoVO]?
     var finalList: [MusicInfoVO]?
     
-    var sortStatus: SortStatus? = .showAll
+    var sortStatus: SortStatus = .showAll
     var isSearchComplete = false
     var latestTime: String?
-    let currentDate : String = {
+    var currentDate : String = {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
         return df.string(from: Date())
     }()
-    let currentTime: String = {
+    var currentTime: String = {
         let df = DateFormatter()
         df.dateFormat = "HH:00"
         return df.string(from: Date())
@@ -295,22 +295,33 @@ class MusicChartListVC: UITableViewController {
             return UITableViewCell()
         }
         
+        let row = self.appdelegate.musicChartList[indexPath.row]
+        
         switch self.sortStatus {
         case .showSuccess:
             sortList(isSucceed: true)
-            cell = makeCell(cell, list: self.sortedList!, indexPath: indexPath)
+            cell = makeCell(cell, row: row)
+            cell.failIndicator.isHidden = true
         case .showFail:
             sortList(isSucceed: false)
-            cell = makeCell(cell, list: self.sortedList!, indexPath: indexPath, textColor: .red)
-        default:
-            let isCellSucceed = appdelegate.musicChartList[indexPath.row].isSucceed
+            cell = makeCell(cell, row: row, textColor: .systemGray)
+            cell.failIndicator.isHidden = false
+        case .showAll:
+            let isCellSucceed = row.isSucceed
             
             if isCellSucceed == true || isCellSucceed == nil {
-                cell = makeCell(cell, list: appdelegate.musicChartList, indexPath: indexPath)
+                cell = makeCell(cell, row: row)
+                cell.failIndicator.isHidden = true
             } else {
-                cell = makeCell(cell, list: appdelegate.musicChartList, indexPath: indexPath, textColor: .red)
+                cell = makeCell(cell, row: row, textColor: .systemGray)
+                cell.failIndicator.isHidden = false
             }
+        default:
+            break
         }
+        
+        
+        
         return cell
     }
     
@@ -355,14 +366,34 @@ class MusicChartListVC: UITableViewController {
     }
     
     
-    func makeCell(_ cell: MusicChartListCell, list: [MusicInfoVO], indexPath: IndexPath, textColor: UIColor = .label) -> MusicChartListCell {
-        cell.rank.text        = ((list[indexPath.row].rank)! as String) + "위"
-        cell.rank.sizeToFit()
+    func makeCell(_ cell: MusicChartListCell, row: MusicInfoVO, textColor: UIColor = .label) -> MusicChartListCell {
+        cell.rank.text        = (row.rank as String?)! + "위"
         cell.rank.textColor   = textColor
-        cell.music.text       = list[indexPath.row].music as String?
+        cell.music.text       = row.music as String?
         cell.music.textColor  = textColor
-        cell.artist.text      = list[indexPath.row].artist as String?
+        cell.artist.text      = row.artist as String?
         cell.artist.textColor = textColor
+        
+        switch row.rankChangeStat{
+        case .no:
+            cell.rankChange.text      = row.rankChangeVal
+            cell.rankChange.textColor = .systemGray
+        case .up:
+            cell.rankChange.text      = "↑\(row.rankChangeVal!)"
+            cell.rankChange.textColor = .systemGreen
+        case .down:
+            cell.rankChange.text      = "↓\(row.rankChangeVal!)"
+            cell.rankChange.textColor = .systemRed
+        case .new:
+            cell.rankChange.text      = row.rankChangeVal
+            cell.rankChange.textColor = .systemOrange
+        default:
+            break
+        }
+        
+        if textColor != .label {
+            cell.rankChange.textColor = textColor
+        }
         
         return cell
     }

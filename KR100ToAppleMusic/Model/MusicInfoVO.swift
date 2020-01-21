@@ -8,11 +8,19 @@
 
 import Foundation
 
+enum RankChangeStat {
+    case up
+    case down
+    case no
+    case new
+}
 
 class MusicInfoVO {
     var rank: String?
     var music: String?
     var artist: String?
+    var rankChangeStat: RankChangeStat?
+    var rankChangeVal: String?
     var melonAlbumImg: String?
     var isSucceed: Bool?
     var musicID: String?

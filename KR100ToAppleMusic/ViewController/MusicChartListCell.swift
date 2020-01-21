@@ -13,7 +13,8 @@ class MusicChartListCell: UITableViewCell {
     @IBOutlet var rank: UILabel!
     @IBOutlet var music: UILabel!
     @IBOutlet var artist: UILabel!
-    
+    @IBOutlet var rankChange: UILabel!
+    @IBOutlet var failIndicator: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
