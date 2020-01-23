@@ -30,7 +30,7 @@ class MusicChartListVC: UITableViewController {
     var progressLabel: UILabel?
     
     
-    let htmlParser = HTMLParser()
+    
     let musicSearch = MusicSearchUtil()
     let tokenUtils = TokenUtils()
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
@@ -38,19 +38,12 @@ class MusicChartListVC: UITableViewController {
     var sortedList: [MusicInfoVO]?
     var finalList: [MusicInfoVO]?
     
+    
     var sortStatus: SortStatus = .showAll
     var isSearchComplete = false
-    var latestTime: String?
-    var currentDate : String = {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        return df.string(from: Date())
-    }()
-    var currentTime: String = {
-        let df = DateFormatter()
-        df.dateFormat = "HH:00"
-        return df.string(from: Date())
-    }()
+    var currentUpdateTime: String?
+    var latestUpdateTime: String?
+    
     
     @IBAction func sortAction(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -80,8 +73,14 @@ class MusicChartListVC: UITableViewController {
         // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
         if isSearchComplete == true {
             let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
-            alert.addTextField() {tf in tf.placeholder = "플레이리스트 제목"}
-            alert.addTextField() {tf in tf.placeholder = "플레이리스트 설명"}
+            alert.addTextField() {tf in
+                tf.placeholder = "플레이리스트 제목"
+                tf.text = "Melon \(self.currentDate())"
+            }
+            alert.addTextField() {tf in
+                tf.placeholder = "플레이리스트 설명"
+                tf.text = "Melon\(self.currentDate()) \(self.currentTime())에 생성됨)"
+            }
             alert.addAction(UIAlertAction(title: "취소", style: .cancel))
             alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
                 let playListName = alert.textFields?.first?.text
@@ -173,16 +172,25 @@ class MusicChartListVC: UITableViewController {
         
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         
-        htmlParser.parseResult(
-            success: {
-                self.okAlert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
-                self.latestTime = self.currentTime
-                self.navigationItem.title = "\(self.currentTime) 집계"
-                self.tableView.reloadData()
+        let htmlParser = HTMLParser()
+        
+        htmlParser.getUpdateTime(
+            success: { time in
+                self.currentUpdateTime = time
+                htmlParser.parseResult(
+                    success: {
+                        self.okAlert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
+                        self.latestUpdateTime = self.currentUpdateTime
+                        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
+                        self.tableView.reloadData()
+                    },
+                    fail: { msg in
+                        self.errorAlert(msg)
+                    }
+                )
             },
             fail: { msg in
                 self.errorAlert(msg)
-                self.errorAlert("음악을 불러오는데 실패했습니다.")
             }
         )
     }
@@ -234,30 +242,51 @@ class MusicChartListVC: UITableViewController {
         customToolBarView = nil
     }
     
+    
+    // MARK: Action Methods
     @objc func pullToRefresh(_ sender: Any) {
-        guard self.currentTime != latestTime! else {
-            self.refreshControl?.endRefreshing()
-            return
-        }
-        
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
-        appdelegate.musicChartList = []
-        
-        htmlParser.parseResult(
-            success: {
-                self.okAlert("\(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
-                self.latestTime = self.currentTime
-                self.navigationItem.title = "\(self.currentTime) 집계"
-                self.tableView.reloadData()
-                self.refreshControl?.endRefreshing()
-            },
+        let htmlParser = HTMLParser()
+        htmlParser.getUpdateTime(
+            success: { time in
+                self.currentUpdateTime = time
+                
+                guard self.currentUpdateTime != self.latestUpdateTime! else {
+                    let alert = UIAlertController(title: nil, message: "갱신할 데이터가 없습니다.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "확인", style: .default))
+                    self.present(alert, animated: true) {
+                        self.refreshControl?.endRefreshing()
+                    }
+                    return
+                }
+                
+                let appdelegate = UIApplication.shared.delegate as! AppDelegate
+                appdelegate.musicChartList = []
+                
+                htmlParser.parseResult(
+                    success: {
+                        self.refreshControl?.endRefreshing()
+                        DispatchQueue.main.async {
+                            self.okAlert("\(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.") {
+                                self.latestUpdateTime = self.currentUpdateTime
+                                self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
+                                self.isSearchComplete = false
+                                self.createBtn.title = "탐색"
+                                self.tableView.reloadData()
+                            } // END of okAlert() closure
+                        } // END of DispatchQueue.main.async closure
+                    }, // END of parseResult(success:) closure
+                    fail: { msg in
+                        self.errorAlert(msg)
+                        self.errorAlert("음악을 불러오는데 실패했습니다.")
+                        self.refreshControl?.endRefreshing()
+                    } // END of parseResult(fail:) closure
+                ) // END of htmlParser.parseResult()
+            }, // END of getUpdateTime(success:) closure
             fail: { msg in
                 self.errorAlert(msg)
-                self.errorAlert("음악을 불러오는데 실패했습니다.")
-                self.refreshControl?.endRefreshing()
-            }
-        )
-    }
+            } // END of getUpdateTime(fail:) closure
+        ) // END of htmlParser.getUpdateTime()
+    } // END of pullToRefresh()
     
     
     // MARK: Other Methods
@@ -274,6 +303,19 @@ class MusicChartListVC: UITableViewController {
                 }
             }
         }
+    }
+    
+    
+    func currentDate() -> String {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        return df.string(from: Date())
+    }
+    
+    func currentTime() -> String {
+        let df = DateFormatter()
+        df.dateFormat = "HH:mm"
+        return df.string(from: Date())
     }
     
     

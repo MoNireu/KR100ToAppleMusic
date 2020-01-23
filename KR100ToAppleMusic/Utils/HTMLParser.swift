@@ -13,7 +13,26 @@ import SwiftSoup
 
 class HTMLParser {
     
-//    static var musicChartList = [MusicInfoVO]()
+    func getUpdateTime(success: ((String)->Void)? = nil, fail: ((String)->Void)? = nil) {
+        let url = "https://www.melon.com/chart/index.htm"
+        
+        let req = AF.request(url)
+        
+        req.responseString() { res in
+            let html = res.value
+//            print(html!)
+            do {
+                let doc: Document = try SwiftSoup.parseBodyFragment(html!)
+                
+                let updateTime = try doc.getElementsByClass("hour").first()?.text()
+                success?(updateTime!)
+            } catch let error as NSError{
+                print(error)
+                let msg = "데이터를 갱신하지 못했습니다."
+                fail?(msg)
+            }
+        }
+    }
     
     func parseResult(success: (()->Void)? = nil, fail: ((String)->Void)? = nil){
         
