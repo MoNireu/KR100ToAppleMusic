@@ -10,7 +10,7 @@
         <!--Music Chart ListVC-->
         <scene sceneID="jcy-dn-8cx">
             <objects>
-                <tableViewController id="8hb-uv-7mZ" customClass="MusicChartListVC" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MusicChartListVC" id="8hb-uv-7mZ" customClass="MusicChartListVC" customModule="MelOnApple" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Gfx-Bv-8JR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,7 +21,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="chart_cell" id="pVb-XZ-bqk" customClass="MusicChartListCell" customModule="KR100ToAppleMusic" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="chart_cell" id="pVb-XZ-bqk" customClass="MusicChartListCell" customModule="MelOnApple" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pVb-XZ-bqk" id="r2Z-tW-3iY">
@@ -98,12 +98,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UwA-0N-KQI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="992.75362318840587" y="185.49107142857142"/>
+            <point key="canvasLocation" x="2152" y="185"/>
         </scene>
         <!--Manual Music SearchVC-->
         <scene sceneID="GcD-4D-yhl">
             <objects>
-                <viewController storyboardIdentifier="manual_music_search" id="2iD-2o-xsT" customClass="ManualMusicSearchVC" customModule="KR100ToAppleMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="manual_music_search" id="2iD-2o-xsT" customClass="ManualMusicSearchVC" customModule="MelOnApple" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eGb-x1-aBX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -139,7 +139,7 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="manual_music_search_cell" rowHeight="70" id="rft-Qf-XCI" customClass="ManualMusicSearchCell" customModule="KR100ToAppleMusic" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="manual_music_search_cell" rowHeight="70" id="rft-Qf-XCI" customClass="ManualMusicSearchCell" customModule="MelOnApple" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rft-Qf-XCI" id="ioN-yp-lwu">
@@ -214,7 +214,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tj1-Mq-1ye" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1869.5652173913045" y="185.49107142857142"/>
+            <point key="canvasLocation" x="3051" y="185"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UAx-Te-MnO">
@@ -231,12 +231,48 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="8hb-uv-7mZ" kind="relationship" relationship="rootViewController" id="4Uk-cv-vSU"/>
+                        <segue destination="m9K-VU-uu4" kind="relationship" relationship="rootViewController" id="YEG-a3-Yz1"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ayB-Nk-6Zg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="82.608695652173921" y="185.49107142857142"/>
         </scene>
+        <!--Fake Launch Screen-->
+        <scene sceneID="wGX-12-Qsr">
+            <objects>
+                <viewController id="m9K-VU-uu4" customClass="FakeLaunchScreen" customModule="MelOnApple" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="s25-wa-kQJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="orW-P9-FCM">
+                                <rect key="frame" x="169.5" y="410.5" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="KpS-dM-1ZF"/>
+                                    <constraint firstAttribute="width" constant="75" id="dSx-47-Mjz"/>
+                                    <constraint firstAttribute="width" secondItem="orW-P9-FCM" secondAttribute="height" multiplier="1:1" id="pGz-22-LLd"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="orW-P9-FCM" firstAttribute="centerX" secondItem="s25-wa-kQJ" secondAttribute="centerX" id="8G7-oA-j6f"/>
+                            <constraint firstItem="orW-P9-FCM" firstAttribute="centerY" secondItem="s25-wa-kQJ" secondAttribute="centerY" id="lmD-7E-OhH"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="vag-J7-8em"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="wbU-fO-NB8"/>
+                    <connections>
+                        <segue destination="8hb-uv-7mZ" kind="show" identifier="toMusicChartListVC" animates="NO" id="Bfc-wJ-2NO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P0F-PJ-t4A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1225" y="185"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="Image" width="512" height="512"/>
+    </resources>
 </document>

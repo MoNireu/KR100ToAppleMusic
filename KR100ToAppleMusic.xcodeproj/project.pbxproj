@@ -24,6 +24,7 @@
 		E1AA587923BD92AC00A617F8 /* MusicInfoVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */; };
 		E1AA587B23BD93F000A617F8 /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587A23BD93F000A617F8 /* HTMLParser.swift */; };
 		E1AA588123BD9EF600A617F8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA588023BD9EF600A617F8 /* Utils.swift */; };
+		E1F95DE023DEF6A5009BC750 /* FakeLaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F95DDF23DEF6A5009BC750 /* FakeLaunchScreen.swift */; };
 		FF8EEC751DB0160707B22E96 /* Pods_KR100ToAppleMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B845E5AEBAA447F9EE3BB7 /* Pods_KR100ToAppleMusic.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,7 +32,7 @@
 		026FF4060F144D31F9343167 /* Pods-KR100ToAppleMusic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KR100ToAppleMusic.release.xcconfig"; path = "Target Support Files/Pods-KR100ToAppleMusic/Pods-KR100ToAppleMusic.release.xcconfig"; sourceTree = "<group>"; };
 		22B845E5AEBAA447F9EE3BB7 /* Pods_KR100ToAppleMusic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KR100ToAppleMusic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29EAAD796FF6D0056BC4E115 /* Pods-KR100ToAppleMusic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KR100ToAppleMusic.debug.xcconfig"; path = "Target Support Files/Pods-KR100ToAppleMusic/Pods-KR100ToAppleMusic.debug.xcconfig"; sourceTree = "<group>"; };
-		E11BCF2823BD8D60000A0FB9 /* KR100ToAppleMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KR100ToAppleMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E11BCF2823BD8D60000A0FB9 /* MelOnApple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MelOnApple.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E11BCF2B23BD8D61000A0FB9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E11BCF2D23BD8D61000A0FB9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E11BCF3223BD8D61000A0FB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicInfoVO.swift; sourceTree = "<group>"; };
 		E1AA587A23BD93F000A617F8 /* HTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLParser.swift; sourceTree = "<group>"; };
 		E1AA588023BD9EF600A617F8 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		E1F95DDF23DEF6A5009BC750 /* FakeLaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FakeLaunchScreen.swift; path = KR100ToAppleMusic/ViewController/FakeLaunchScreen.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +96,7 @@
 		E11BCF2923BD8D60000A0FB9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E11BCF2823BD8D60000A0FB9 /* KR100ToAppleMusic.app */,
+				E11BCF2823BD8D60000A0FB9 /* MelOnApple.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,6 +129,7 @@
 		E11BCF4723BD9070000A0FB9 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				E1F95DDF23DEF6A5009BC750 /* FakeLaunchScreen.swift */,
 				E16A2FBA23D32A5A00064F15 /* ManualMusicSearchCell.swift */,
 				E11BCF4223BD9026000A0FB9 /* MusicChartListCell.swift */,
 				E11BCF4423BD9040000A0FB9 /* MusicChartListVC.swift */,
@@ -175,7 +178,7 @@
 			);
 			name = KR100ToAppleMusic;
 			productName = KR100ToAppleMusic;
-			productReference = E11BCF2823BD8D60000A0FB9 /* KR100ToAppleMusic.app */;
+			productReference = E11BCF2823BD8D60000A0FB9 /* MelOnApple.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -277,6 +280,7 @@
 				E11BCF3623BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld in Sources */,
 				E11BCF4323BD9026000A0FB9 /* MusicChartListCell.swift in Sources */,
 				E14C69E223CD0B5300DA9A84 /* CreatePlaylistUtil.swift in Sources */,
+				E1F95DE023DEF6A5009BC750 /* FakeLaunchScreen.swift in Sources */,
 				E11BCF2E23BD8D61000A0FB9 /* SceneDelegate.swift in Sources */,
 				E16CE34423CCD623003BDECB /* ManualSearchMusicInfoVO.swift in Sources */,
 				E127B50723C9EA440023FF8C /* CustomToolBarView.swift in Sources */,
@@ -438,7 +442,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = monireu.KR100ToAppleMusic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MelOnApple;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -458,7 +462,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = monireu.KR100ToAppleMusic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MelOnApple;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

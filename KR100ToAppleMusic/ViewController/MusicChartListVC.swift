@@ -113,8 +113,9 @@ class MusicChartListVC: UITableViewController {
                 } // END of if-else Statement
             }) // END of alert.addAction("확인")
             self.present(alert, animated: true)
-        }
+        } // END of isSearchComplete == true
         
+        // AppleMusic에서 음악 탐색을 시작.
         else {
             self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
                 // 탐색 로직 시작
@@ -161,38 +162,48 @@ class MusicChartListVC: UITableViewController {
     // MARK: View CallBack Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.navigationController?.navigationBar.isHidden = false
+        //        self.navigationController?.toolbar.isHidden = true
         
         self.tableView.allowsSelection = false
         self.sortBtn.tintColor = .clear
-        self.navigationController?.toolbar.isHidden = true
+
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
         self.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
         
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
         
-        let htmlParser = HTMLParser()
         
-        htmlParser.getUpdateTime(
-            success: { time in
-                self.currentUpdateTime = time
-                htmlParser.parseResult(
-                    success: {
-                        self.okAlert("총 \(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
-                        self.latestUpdateTime = self.currentUpdateTime
-                        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
-                        self.tableView.reloadData()
-                    },
-                    fail: { msg in
-                        self.errorAlert(msg)
-                    }
-                )
-            },
-            fail: { msg in
-                self.errorAlert(msg)
-            }
-        )
+        self.okAlert("총 \(self.appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
+        self.latestUpdateTime = self.currentUpdateTime
+        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
+        self.tableView.reloadData()
+        
+        
+        
+//        let htmlParser = HTMLParser()
+//
+//        htmlParser.getUpdateTime(
+//            success: { time in
+//                self.currentUpdateTime = time
+//                htmlParser.parseResult(
+//                    success: {
+//                        self.okAlert("총 \(self.appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
+//                        self.latestUpdateTime = self.currentUpdateTime
+//                        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
+//                        self.tableView.reloadData()
+//                    },
+//                    fail: { msg in
+//                        self.errorAlert(msg)
+//                    }
+//                )
+//            },
+//            fail: { msg in
+//                self.errorAlert(msg)
+//            }
+//        )
     }
     
     
@@ -259,14 +270,13 @@ class MusicChartListVC: UITableViewController {
                     return
                 }
                 
-                let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                appdelegate.musicChartList = []
+                self.appdelegate.musicChartList.removeAll()
                 
                 htmlParser.parseResult(
                     success: {
                         self.refreshControl?.endRefreshing()
                         DispatchQueue.main.async {
-                            self.okAlert("\(appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.") {
+                            self.okAlert("\(self.appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.") {
                                 self.latestUpdateTime = self.currentUpdateTime
                                 self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
                                 self.isSearchComplete = false
@@ -329,7 +339,7 @@ class MusicChartListVC: UITableViewController {
             sortList(isSucceed: false)
             return self.sortedList!.count
         default:
-         return appdelegate.musicChartList.count
+            return self.appdelegate.musicChartList.count
         }
     }
     
