@@ -246,7 +246,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="orW-P9-FCM">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="LaunchBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="L1r-oS-glT">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchIcon.PNG" translatesAutoresizingMaskIntoConstraints="NO" id="orW-P9-FCM">
                                 <rect key="frame" x="169.5" y="410.5" width="75" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="75" id="KpS-dM-1ZF"/>
@@ -269,10 +273,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P0F-PJ-t4A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1225" y="185"/>
+            <point key="canvasLocation" x="1224.6376811594205" y="184.82142857142856"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Image" width="512" height="512"/>
+        <image name="LaunchBackground.png" width="1126" height="2436"/>
+        <image name="LaunchIcon.PNG" width="187" height="214"/>
     </resources>
 </document>
