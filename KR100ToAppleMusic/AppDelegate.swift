@@ -18,11 +18,12 @@ struct MyClaims: Claims {
 }
 
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    var musicChartList = [MusicInfoVO]()
+    var tempMusicChartList: [MusicInfoVO]? = [MusicInfoVO]()
+    lazy var musicChartList = [MusicInfoVO]()
+    
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

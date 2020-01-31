@@ -112,9 +112,7 @@ class MusicSearchUtil: SKCloudServiceController {
         
         // 이부분 searchMusic으로 옮기고 삭제하기
         if keyWord == nil {
-            DispatchQueue.global(qos: .background).async {
-                self.searchEachMusic(url: url!, header: header!, fail: fail, success: success, complete: complete)
-            }
+            self.searchEachMusic(url: url!, header: header!, fail: fail, success: success, complete: complete)
         } else {
             self.searchOneMusic(url: url!, header: header!, keyWord: keyWord!, fail: fail, success: success, complete: complete)
         }

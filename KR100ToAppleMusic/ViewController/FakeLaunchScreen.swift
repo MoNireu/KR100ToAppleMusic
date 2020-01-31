@@ -24,8 +24,10 @@ class FakeLaunchScreen: UIViewController {
             success: { time in
                 self.htmlParser.parseResult(
                     success: {
+                        let appdelegate = UIApplication.shared.delegate as? AppDelegate
+                        appdelegate!.musicChartList = appdelegate!.tempMusicChartList!
+                        appdelegate?.tempMusicChartList = nil
                         self.currentUpdateTime = time
-                        self.navigationController?.isNavigationBarHidden = false
                         self.performSegue(withIdentifier: "toMusicChartListVC", sender: self)
                     },
                     fail: { msg in
@@ -44,7 +46,8 @@ class FakeLaunchScreen: UIViewController {
         if segue.identifier == "toMusicChartListVC" {
             let vc = segue.destination as? MusicChartListVC
             vc?.currentUpdateTime = self.currentUpdateTime
+            self.navigationController?.isNavigationBarHidden = false
+            self.navigationController?.isToolbarHidden = false
         }
     }
-
 }

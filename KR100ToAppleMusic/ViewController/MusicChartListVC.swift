@@ -31,7 +31,7 @@ class MusicChartListVC: UITableViewController {
     
     
     
-    let musicSearch = MusicSearchUtil()
+    let musicSearchUtil = MusicSearchUtil()
     let tokenUtils = TokenUtils()
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -69,58 +69,12 @@ class MusicChartListVC: UITableViewController {
     
     
     @IBAction func createAction(_ sender: Any) {
-        
         // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
-        if isSearchComplete == true {
-            let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
-            alert.addTextField() {tf in
-                tf.placeholder = "플레이리스트 제목"
-                tf.text = "Melon \(self.currentDate())"
-            }
-            alert.addTextField() {tf in
-                tf.placeholder = "플레이리스트 설명"
-                tf.text = "Melon\(self.currentDate()) \(self.currentTime())에 생성됨)"
-            }
-            alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-                let playListName = alert.textFields?.first?.text
-                let playListDesc = alert.textFields?.last?.text
-                
-                if (playListName == nil || playListName!.isEmpty == true) && (playListDesc == nil || playListDesc!.isEmpty == true){
-                    self.errorAlert("플레이리스트 제목과 설명을 입력해주세요.") {self.present(alert, animated: true)}
-                }else if playListName == nil || playListName!.isEmpty == true {
-                    self.errorAlert("플레이리스트 제목을 입력해주세요.") {self.present(alert, animated: true)}
-                } else if playListDesc == nil || playListDesc!.isEmpty == true {
-                    self.errorAlert("플레이리스트 설명을 입력해주세요.") {self.present(alert, animated: true)}
-                } else {
-                    self.sortList(isSucceed: true)
-                    print("##############\(self.sortedList!)")
-                    self.musicSearch.createPlayList(
-                        list: self.sortedList!,
-                        name: playListName!,
-                        desc: playListDesc!,
-                        fail: {msg in
-                            self.errorAlert(msg) {
-                            self.createBtn.isEnabled = true
-                            }
-                        }, // END of fail:
-                        success: {msg in
-                            self.okAlert(msg) {
-                            self.createBtn.isEnabled = true
-                            }
-                        } // END of success:
-                    ) // END of self.musicSearch.createPlayList CLOSURE
-                } // END of if-else Statement
-            }) // END of alert.addAction("확인")
-            self.present(alert, animated: true)
-        } // END of isSearchComplete == true
-        
-        // AppleMusic에서 음악 탐색을 시작.
-        else {
+        if isSearchComplete == false {
             self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
                 // 탐색 로직 시작
                 self.createBtn.isEnabled = false
-                self.musicSearch.startSearching(
+                self.musicSearchUtil.startSearching(
                     fail: { msg in
                         self.actIndicatorView?.stopAnimating()
                         self.errorAlert(msg) {
@@ -156,6 +110,51 @@ class MusicChartListVC: UITableViewController {
                 )
                 self.showLoading()
             }
+        } // END of isSearchComplete == false
+        
+        // isSearchComplete이 True일 경우 AppleMusic에서 음악 탐색을 시작.
+        else {
+            let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
+            alert.addTextField() {tf in
+                tf.placeholder = "플레이리스트 제목"
+                tf.text = "Melon \(self.currentDate())"
+            }
+            alert.addTextField() {tf in
+                tf.placeholder = "플레이리스트 설명"
+                tf.text = "Melon\(self.currentDate()) \(self.currentTime())에 생성됨)"
+            }
+            alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+                let playListName = alert.textFields?.first?.text
+                let playListDesc = alert.textFields?.last?.text
+                
+                if (playListName == nil || playListName!.isEmpty == true) && (playListDesc == nil || playListDesc!.isEmpty == true){
+                    self.errorAlert("플레이리스트 제목과 설명을 입력해주세요.") {self.present(alert, animated: true)}
+                }else if playListName == nil || playListName!.isEmpty == true {
+                    self.errorAlert("플레이리스트 제목을 입력해주세요.") {self.present(alert, animated: true)}
+                } else if playListDesc == nil || playListDesc!.isEmpty == true {
+                    self.errorAlert("플레이리스트 설명을 입력해주세요.") {self.present(alert, animated: true)}
+                } else {
+                    self.sortList(isSucceed: true)
+                    print("##############\(self.sortedList!)")
+                    self.musicSearchUtil.createPlayList(
+                        list: self.sortedList!,
+                        name: playListName!,
+                        desc: playListDesc!,
+                        fail: {msg in
+                            self.errorAlert(msg) {
+                                self.createBtn.isEnabled = true
+                            }
+                    }, // END of fail:
+                        success: {msg in
+                            self.okAlert(msg) {
+                                self.createBtn.isEnabled = true
+                            }
+                    } // END of success:
+                    ) // END of self.musicSearch.createPlayList CLOSURE
+                } // END of if-else Statement
+            }) // END of alert.addAction("확인")
+            self.present(alert, animated: true)
         }
     }
     
@@ -164,7 +163,7 @@ class MusicChartListVC: UITableViewController {
         super.viewDidLoad()
 
         self.navigationController?.navigationBar.isHidden = false
-        //        self.navigationController?.toolbar.isHidden = true
+        self.navigationController?.toolbar.isHidden = true
         
         self.tableView.allowsSelection = false
         self.sortBtn.tintColor = .clear
@@ -174,13 +173,9 @@ class MusicChartListVC: UITableViewController {
         self.refreshControl?.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
         self.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
         
-        
-        
-        self.okAlert("총 \(self.appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
         self.latestUpdateTime = self.currentUpdateTime
         self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
         self.tableView.reloadData()
-        
         
         
 //        let htmlParser = HTMLParser()
@@ -268,9 +263,7 @@ class MusicChartListVC: UITableViewController {
                         self.refreshControl?.endRefreshing()
                     }
                     return
-                }
-                
-                self.appdelegate.musicChartList.removeAll()
+                } // END of guard statement
                 
                 htmlParser.parseResult(
                     success: {
@@ -281,6 +274,12 @@ class MusicChartListVC: UITableViewController {
                                 self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
                                 self.isSearchComplete = false
                                 self.createBtn.title = "탐색"
+                                
+                                self.appdelegate.musicChartList = self.appdelegate.tempMusicChartList!
+                                self.appdelegate.tempMusicChartList = nil
+                                
+                                self.musicSearchUtil.index = 0
+                                
                                 self.tableView.reloadData()
                             } // END of okAlert() closure
                         } // END of DispatchQueue.main.async closure
@@ -350,25 +349,37 @@ class MusicChartListVC: UITableViewController {
             return UITableViewCell()
         }
         
-        let row = self.appdelegate.musicChartList[indexPath.row]
+        let item = self.appdelegate.musicChartList
         
         switch self.sortStatus {
         case .showSuccess:
+            guard indexPath.row >= sortedList!.startIndex && indexPath.row <= sortedList!.endIndex else {
+                print("Out of Index")
+                return UITableViewCell()
+            }
             sortList(isSucceed: true)
             cell = makeCell(cell, row: (self.sortedList?[indexPath.row])!)
             cell.failIndicator.isHidden = true
         case .showFail:
+            guard indexPath.row >= sortedList!.startIndex && indexPath.row <= sortedList!.endIndex else {
+                print("Out of Index")
+                return UITableViewCell()
+            }
             sortList(isSucceed: false)
             cell = makeCell(cell, row: (self.sortedList?[indexPath.row])!, textColor: .systemGray)
             cell.failIndicator.isHidden = false
         case .showAll:
-            let isCellSucceed = row.isSucceed
+            guard indexPath.row >= item.startIndex && indexPath.row <= item.endIndex else {
+                print("Out of Index")
+                return UITableViewCell()
+            }
+            let isCellSucceed = item[indexPath.row].isSucceed
             
             if isCellSucceed == true || isCellSucceed == nil {
-                cell = makeCell(cell, row: row)
+                cell = makeCell(cell, row: item[indexPath.row])
                 cell.failIndicator.isHidden = true
             } else {
-                cell = makeCell(cell, row: row, textColor: .systemGray)
+                cell = makeCell(cell, row: item[indexPath.row], textColor: .systemGray)
                 cell.failIndicator.isHidden = false
             }
         default:
@@ -392,10 +403,14 @@ class MusicChartListVC: UITableViewController {
         let selectedMusicTitle  = appdelegate.musicChartList[originIndex].music
         let selectedMusicArtist = appdelegate.musicChartList[originIndex].artist
         
+        let musicSearchUtil = MusicSearchUtil()
+        let modifiedMusicTitle = musicSearchUtil.modifyString(string: selectedMusicTitle)
+        
+        
         let alert = UIAlertController(title: "수동 검색", message: "\n\(selectedMusicTitle!)\n\(selectedMusicArtist!)", preferredStyle: .alert)
         alert.addTextField() { tf in
             tf.placeholder = "수동 검색할 곡 명을 입력해주세요"
-            tf.textAlignment = .natural
+            tf.text = modifiedMusicTitle
         }
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in

@@ -20,7 +20,6 @@ class HTMLParser {
         
         req.responseString() { res in
             let html = res.value
-//            print(html!)
             do {
                 let doc: Document = try SwiftSoup.parseBodyFragment(html!)
                 
@@ -34,7 +33,7 @@ class HTMLParser {
         }
     }
     
-    func parseResult(success: (()->Void)? = nil, fail: ((String)->Void)? = nil){
+    func parseResult(list: [MusicInfoVO]? = nil, success: (()->Void)? = nil, fail: ((String)->Void)? = nil){
         
         // 파싱시작
         let url = "https://m.app.melon.com/cds/main/mobile4web/main_chartPaging.htm"
@@ -52,7 +51,7 @@ class HTMLParser {
         req.responseString() { res in
             let html = res.value
             let appdelegate = UIApplication.shared.delegate as! AppDelegate
-            
+            appdelegate.tempMusicChartList = [MusicInfoVO]()
             do {
                 let doc: Document = try SwiftSoup.parseBodyFragment(html!)
                 
@@ -61,6 +60,7 @@ class HTMLParser {
                 let contentChart = try doc.select("div.content.chart")
                 let rankChange   = try contentChart.select("span")
                 let img          = try doc.getElementsByClass("img")
+                
                 
 
                 for i in 0 ..< artist.count {
@@ -95,14 +95,12 @@ class HTMLParser {
                     let imgURL = try img.get(i).attr("style")
                     let startIndex = imgURL.index(imgURL.firstIndex(of: "'")!, offsetBy: 3)
                     let endIndex = imgURL.lastIndex(of:"'")
-                    
                     musicInfoObject.melonAlbumImg = String(imgURL[(startIndex)..<(endIndex)!])
 
-                    print(musicInfoObject.melonAlbumImg!)
-                    appdelegate.musicChartList.append(musicInfoObject)
+                    appdelegate.tempMusicChartList?.append(musicInfoObject)
                 }
                 
-                for vo in appdelegate.musicChartList {
+                for vo in appdelegate.tempMusicChartList!  {
                     print("\(vo.rank!) / \(vo.artist!) / \(vo.music!)")
                 }
             } catch Exception.Error(let type, let message) {
