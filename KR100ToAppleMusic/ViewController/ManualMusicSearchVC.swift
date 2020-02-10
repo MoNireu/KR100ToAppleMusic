@@ -48,7 +48,11 @@ class ManualMusicSearchVC: UIViewController {
         musicSearchUtil.startSearch(
             keyWord: keyword,
             fail: { msg in
-                self.errorAlert(msg)
+                self.errorAlert(msg) {
+                    self.dismiss(animated: true) {
+                        self.delegate?.modalFailSearching()
+                    }
+                }
             },
             success: { res in
                 let result = res as! ManualSearchMusicInfoVO

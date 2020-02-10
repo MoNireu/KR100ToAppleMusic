@@ -43,7 +43,7 @@ class HTMLParser {
         let param = [
             "startIndex" : 1,
             "pageSize" : 50,
-            "rowsCnt" : 100
+            "rowsCnt" : 10
         ]
         
         let req = AF.request(url, parameters: param, headers: header)

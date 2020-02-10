@@ -201,10 +201,15 @@ class MusicSearchUtil: SKCloudServiceController {
                 return
             }
             
-            
             let results = jsonObject["results"] as? NSDictionary
             let songs = results?["songs"] as? NSDictionary
             let data = songs?["data"] as? NSArray
+            
+            guard data != nil else {
+                let msg = "검색 결과가 없습니다."
+                fail?(msg)
+                return
+            }
             
             for list in data! {
                 let dataObject = list as? NSDictionary

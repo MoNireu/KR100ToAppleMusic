@@ -16,6 +16,7 @@ enum SortStatus: Int {
 
 protocol ModalHandler {
     func modalDismissed()
+    func modalFailSearching()
 }
 
 
@@ -38,9 +39,10 @@ class MusicChartListVC: UITableViewController {
     var sortedList: [MusicInfoVO]?
     var finalList: [MusicInfoVO]?
     
-    
     var sortStatus: SortStatus = .showAll
     var isSearchComplete = false
+    var selectedRow: Int?
+    
     var currentUpdateTime: String?
     var latestUpdateTime: String?
     
@@ -375,39 +377,7 @@ class MusicChartListVC: UITableViewController {
         default:
             originIndex = Int((self.sortedList?[indexPath.row].rank)!)! - 1
         }
-        
-        let selectedMusicTitle  = appdelegate.musicChartList[originIndex].music
-        let selectedMusicArtist = appdelegate.musicChartList[originIndex].artist
-        
-        let musicSearchUtil = MusicSearchUtil()
-        let modifiedMusicTitle = musicSearchUtil.modifyString(string: selectedMusicTitle)
-        
-        
-        let alert = UIAlertController(title: "수동 검색", message: "\n\(selectedMusicTitle!)\n\(selectedMusicArtist!)", preferredStyle: .alert)
-        alert.addTextField() { tf in
-            tf.placeholder = "수동 검색할 곡 명을 입력해주세요"
-            tf.text = modifiedMusicTitle
-            tf.clearButtonMode = .always
-        }
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-            guard alert.textFields?.first?.text != nil && alert.textFields?.first?.text?.isEmpty == false  else{
-                self.errorAlert("검색어를 입력해주세요.")
-                return
-            }
-            
-            let manualMusicSearchVC = self.storyboard?.instantiateViewController(identifier: "manual_music_search") as! ManualMusicSearchVC
-            
-            manualMusicSearchVC.music       = selectedMusicTitle
-            manualMusicSearchVC.artist      = selectedMusicArtist
-            manualMusicSearchVC.keyword     = alert.textFields?.first!.text
-            manualMusicSearchVC.originIndex = originIndex
-            manualMusicSearchVC.delegate    = self
-            manualMusicSearchVC.melonAlbumImageURL = self.appdelegate.musicChartList[originIndex].melonAlbumImg
-
-            self.present(manualMusicSearchVC, animated: true)
-        })
-        self.present(alert, animated: true)
+        manualSearchAlert(index: originIndex)
     }
     
     
@@ -442,11 +412,55 @@ class MusicChartListVC: UITableViewController {
         
         return cell
     }
+    
+    func manualSearchAlert(index: Int) {
+        let selectedMusicTitle  = appdelegate.musicChartList[index].music
+        let selectedMusicArtist = appdelegate.musicChartList[index].artist
+        
+        let musicSearchUtil = MusicSearchUtil()
+        let modifiedMusicTitle = musicSearchUtil.modifyString(string: selectedMusicTitle)
+        
+        
+        let alert = UIAlertController(title: "수동 검색", message: "\n\(selectedMusicTitle!)\n\(selectedMusicArtist!)", preferredStyle: .alert)
+        alert.addTextField() { tf in
+            tf.placeholder = "수동 검색할 곡 명을 입력해주세요"
+            tf.text = modifiedMusicTitle
+            tf.clearButtonMode = .always
+        }
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            guard alert.textFields?.first?.text != nil && alert.textFields?.first?.text?.isEmpty == false  else{
+                self.errorAlert("검색어를 입력해주세요.")
+                return
+            }
+            
+            let manualMusicSearchVC = self.storyboard?.instantiateViewController(identifier: "manual_music_search") as! ManualMusicSearchVC
+            
+            manualMusicSearchVC.music       = selectedMusicTitle
+            manualMusicSearchVC.artist      = selectedMusicArtist
+            manualMusicSearchVC.keyword     = alert.textFields?.first!.text
+            manualMusicSearchVC.originIndex = index
+            manualMusicSearchVC.delegate    = self
+            manualMusicSearchVC.melonAlbumImageURL = self.appdelegate.musicChartList[index].melonAlbumImg
+
+            self.present(manualMusicSearchVC, animated: true) {
+                self.selectedRow = index
+            }
+        })
+        self.present(alert, animated: true)
+    }
 }
 
 
 extension MusicChartListVC: ModalHandler {
     func modalDismissed() {
         self.tableView.reloadData()
+    }
+    
+    func modalFailSearching() {
+        guard selectedRow != nil else {
+            return
+        }
+        manualSearchAlert(index: selectedRow!)
     }
 }
