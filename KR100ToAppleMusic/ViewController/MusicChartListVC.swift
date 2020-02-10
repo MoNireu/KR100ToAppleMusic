@@ -73,6 +73,7 @@ class MusicChartListVC: UITableViewController {
         if isSearchComplete == false {
             self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
                 // 탐색 로직 시작
+                self.showLoading()
                 self.createBtn.isEnabled = false
                 self.musicSearchUtil.startSearching(
                     fail: { msg in
@@ -86,9 +87,6 @@ class MusicChartListVC: UITableViewController {
                     success: { cnt in
                         let count = cnt as! Float
                         self.progressLabel?.text     = "총 \(self.appdelegate.musicChartList.count)곡 중 \(Int(count))곡 완료 "
-                        self.progressLabel?.sizeToFit()
-                        self.progressLabel?.center.x = (self.customToolBarView?.center.x)!
-                        
                         self.progressBar?.setProgress((count / Float(self.appdelegate.musicChartList.count)), animated: true)
                         
                         self.tableView.reloadData()
@@ -103,12 +101,12 @@ class MusicChartListVC: UITableViewController {
                             self.sortBtn.isEnabled   = true
                             self.sortBtn.tintColor   = .systemBlue
                             self.isSearchComplete    = true
+
                             self.tableView.allowsSelection = true
                             self.tableView.reloadData()
                         }
                     }
                 )
-                self.showLoading()
             }
         } // END of isSearchComplete == false
         
@@ -176,29 +174,6 @@ class MusicChartListVC: UITableViewController {
         self.latestUpdateTime = self.currentUpdateTime
         self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
         self.tableView.reloadData()
-        
-        
-//        let htmlParser = HTMLParser()
-//
-//        htmlParser.getUpdateTime(
-//            success: { time in
-//                self.currentUpdateTime = time
-//                htmlParser.parseResult(
-//                    success: {
-//                        self.okAlert("총 \(self.appdelegate.musicChartList.count)개의 불러오기를 성공했습니다.")
-//                        self.latestUpdateTime = self.currentUpdateTime
-//                        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
-//                        self.tableView.reloadData()
-//                    },
-//                    fail: { msg in
-//                        self.errorAlert(msg)
-//                    }
-//                )
-//            },
-//            fail: { msg in
-//                self.errorAlert(msg)
-//            }
-//        )
     }
     
     
@@ -213,8 +188,9 @@ class MusicChartListVC: UITableViewController {
         customToolBarView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: (self.navigationController?.toolbar.frame.height)!))
         
         let objectBetweenInterval = 10
-        progressLabel                = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        progressLabel?.text          = "총 \(appdelegate.musicChartList.count)곡 중 0곡 완료 "
+//        progressLabel                = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        progressLabel                = UILabel()
+        progressLabel?.text          = "총 \(appdelegate.musicChartList.count)곡 중   0곡 완료 "
         progressLabel?.sizeToFit()
         progressLabel?.center.x      = (self.customToolBarView?.center.x)!
         progressLabel?.center.y      = self.customToolBarView!.center.y - CGFloat(objectBetweenInterval)
@@ -241,11 +217,11 @@ class MusicChartListVC: UITableViewController {
     
     
     func hideLoading() {
+        progressLabel?.removeFromSuperview()
+        progressBar?.removeFromSuperview()
+        actIndicatorView?.removeFromSuperview()
+        customToolBarView?.removeFromSuperview()
         self.navigationController?.toolbar.isHidden = true
-        progressLabel = nil
-        progressBar = nil
-        actIndicatorView = nil
-        customToolBarView = nil
     }
     
     
@@ -411,6 +387,7 @@ class MusicChartListVC: UITableViewController {
         alert.addTextField() { tf in
             tf.placeholder = "수동 검색할 곡 명을 입력해주세요"
             tf.text = modifiedMusicTitle
+            tf.clearButtonMode = .always
         }
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
