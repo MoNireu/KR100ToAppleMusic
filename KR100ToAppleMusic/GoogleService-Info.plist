@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>278004355126-sanluknfs4mltl7or3l373sakq6a5juv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.278004355126-sanluknfs4mltl7or3l373sakq6a5juv</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAZbwiAs0lCuO58aCAV6LXglgArJ4H8sRM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>278004355126</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>monireu.KR100ToAppleMusic</string>
+	<key>PROJECT_ID</key>
+	<string>melonapple</string>
+	<key>STORAGE_BUCKET</key>
+	<string>melonapple.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:278004355126:ios:967aeabc724efb59578897</string>
+	<key>DATABASE_URL</key>
+	<string>https://melonapple.firebaseio.com</string>
+</dict>
+</plist>

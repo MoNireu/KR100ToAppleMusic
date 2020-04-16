@@ -247,7 +247,6 @@ class MusicSearchUtil: SKCloudServiceController {
         let resultArray: NSMutableArray = []
         for object in list {
             let data = ["id" : object.musicID!, "type" : "songs"]
-            print("!@#$\(data)")
             resultArray.add(data)
         }
         return resultArray

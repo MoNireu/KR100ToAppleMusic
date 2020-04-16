@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import StoreKit
 import Alamofire
+import Firebase
+import FirebaseFirestore
 
 //extension UITableViewController {
 //    func okAlert(_ message: String, completion: (()->Void)? = nil) {
@@ -104,5 +106,28 @@ class TokenUtils {
             print("Nothing was retrieved from the keychain. Status code \(status)")
             return nil
         }
+    }
+    
+    func downloadDevToken() -> (kid: String, iss: String, privateKey: String)? {
+        let appdelegate = UIApplication.shared.delegate as? AppDelegate
+        
+        let docRef = appdelegate?.db.collection("Token").document("DevToken")
+        var tokenTuple: (kid: String, iss: String, privateKey: String)?
+        docRef?.getDocument{ (doc, error) in
+            if error == nil { // success
+                if let data = doc?.data() {
+                    tokenTuple?.kid        = (data["kid"] as? String)!
+                    tokenTuple?.iss        = (data["iss"] as? String)!
+                    tokenTuple?.privateKey = (data["privateKey"] as? String)!
+                }
+                else {
+                    print("ERROR - downloadDevToken() : document data nil")
+                }
+            }
+            else {
+                print("ERROR - downlaodDevToken() : \(error?.localizedDescription)")
+            }
+        }
+        return tokenTuple
     }
 }

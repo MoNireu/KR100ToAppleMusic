@@ -25,6 +25,7 @@
 		E1AA587923BD92AC00A617F8 /* MusicInfoVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */; };
 		E1AA587B23BD93F000A617F8 /* HTMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA587A23BD93F000A617F8 /* HTMLParser.swift */; };
 		E1AA588123BD9EF600A617F8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AA588023BD9EF600A617F8 /* Utils.swift */; };
+		E1EB675E244897A10087FD6E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1EB675D244897A10087FD6E /* GoogleService-Info.plist */; };
 		E1F95DE023DEF6A5009BC750 /* FakeLaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F95DDF23DEF6A5009BC750 /* FakeLaunchScreen.swift */; };
 		FF8EEC751DB0160707B22E96 /* Pods_KR100ToAppleMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22B845E5AEBAA447F9EE3BB7 /* Pods_KR100ToAppleMusic.framework */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 		E1AA587823BD92AC00A617F8 /* MusicInfoVO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicInfoVO.swift; sourceTree = "<group>"; };
 		E1AA587A23BD93F000A617F8 /* HTMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLParser.swift; sourceTree = "<group>"; };
 		E1AA588023BD9EF600A617F8 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		E1EB675D244897A10087FD6E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E1F95DDF23DEF6A5009BC750 /* FakeLaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FakeLaunchScreen.swift; path = KR100ToAppleMusic/ViewController/FakeLaunchScreen.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -116,6 +118,7 @@
 				E11BCF3723BD8D62000A0FB9 /* Assets.xcassets */,
 				E11BCF3C23BD8D62000A0FB9 /* Info.plist */,
 				E11BCF3423BD8D61000A0FB9 /* KR100ToAppleMusic.xcdatamodeld */,
+				E1EB675D244897A10087FD6E /* GoogleService-Info.plist */,
 			);
 			path = KR100ToAppleMusic;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E11BCF3B23BD8D62000A0FB9 /* LaunchScreen.storyboard in Resources */,
+				E1EB675E244897A10087FD6E /* GoogleService-Info.plist in Resources */,
 				E11BCF3823BD8D62000A0FB9 /* Assets.xcassets in Resources */,
 				E1A4AA2123DF1A9100379F34 /* LaunchIcon.PNG in Resources */,
 				E11BCF3323BD8D61000A0FB9 /* Main.storyboard in Resources */,

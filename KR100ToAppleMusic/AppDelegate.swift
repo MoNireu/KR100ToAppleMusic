@@ -9,7 +9,8 @@
 import UIKit
 import CoreData
 import SwiftJWT
-
+import Firebase
+import FirebaseFirestore
 
 struct MyClaims: Claims {
     let iss: String
@@ -24,9 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tempMusicChartList: [MusicInfoVO]? = [MusicInfoVO]()
     lazy var musicChartList = [MusicInfoVO]()
     
-    
+    let db = Firestore.firestore()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        FirebaseApp.configure()
         
         let myHeader = Header(kid: "475YGH7887")
         let myClaims = MyClaims(iss: "TBWQTY9PVU", iat: Date(), exp: Date(timeIntervalSinceNow: 3600))

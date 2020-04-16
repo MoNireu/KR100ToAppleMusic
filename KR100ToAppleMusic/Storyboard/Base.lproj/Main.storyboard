@@ -93,6 +93,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="createBtn" destination="dVt-9V-g2R" id="Hg3-VS-0ZX"/>
+                        <outlet property="navItem" destination="L8d-Vy-bKd" id="Cyr-Wh-VUe"/>
                         <outlet property="sortBtn" destination="7im-yh-B0S" id="cJd-oY-bvc"/>
                     </connections>
                 </tableViewController>

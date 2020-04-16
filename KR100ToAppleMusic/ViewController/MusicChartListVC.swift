@@ -24,11 +24,14 @@ class MusicChartListVC: UITableViewController {
 
     @IBOutlet var createBtn: UIBarButtonItem!
     @IBOutlet var sortBtn: UIBarButtonItem!
+    @IBOutlet var navItem: UINavigationItem!
     
     var actIndicatorView: UIActivityIndicatorView?
     var customToolBarView: UIView?
     var progressBar: UIProgressView?
     var progressLabel: UILabel?
+    var searchController: UISearchController?
+    
     
     
     
@@ -38,6 +41,7 @@ class MusicChartListVC: UITableViewController {
     
     var sortedList: [MusicInfoVO]?
     var finalList: [MusicInfoVO]?
+    var filteredList: [MusicInfoVO]?
     
     var sortStatus: SortStatus = .showAll
     var isSearchComplete = false
@@ -161,9 +165,16 @@ class MusicChartListVC: UITableViewController {
     // MARK: View CallBack Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        searchController = UISearchController(searchResultsController: nil)
+        searchController?.delegate = self as? UISearchControllerDelegate
+        searchController?.hidesNavigationBarDuringPresentation = false
+        searchController?.searchResultsUpdater = self
+        
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.toolbar.isHidden = true
+        navItem.searchController = searchController
+        
         
         self.tableView.allowsSelection = false
         self.sortBtn.tintColor = .clear
@@ -308,6 +319,11 @@ class MusicChartListVC: UITableViewController {
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        guard self.searchController!.isActive == false else {
+            return filteredList!.count
+        }
+        
         switch sortStatus {
         case .showSuccess:
             sortList(isSucceed: true)
@@ -325,6 +341,11 @@ class MusicChartListVC: UITableViewController {
         guard var cell = tableView.dequeueReusableCell(withIdentifier: "chart_cell", for: indexPath) as? MusicChartListCell else {
             print("error making cell")
             return UITableViewCell()
+        }
+        
+        guard self.searchController!.isActive == false else {
+            cell = makeCell(cell, row: filteredList![indexPath.row])
+            return cell
         }
         
         let item = self.appdelegate.musicChartList
@@ -451,10 +472,30 @@ class MusicChartListVC: UITableViewController {
     }
 }
 
+extension MusicChartListVC: UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate {
+    func filterContent(searchText: String) {
+        self.filteredList = self.appdelegate.musicChartList.filter { (musicList: MusicInfoVO) -> Bool in
+            return musicList.music!.contains(searchText) || musicList.artist!.contains(searchText)
+        }
+        self.tableView.reloadData()
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text
+        
+        guard searchText?.isEmpty == false else {
+            return
+        }
+        filterContent(searchText: searchText!)
+    }
+    
+}
+
 
 extension MusicChartListVC: ModalHandler {
     func modalDismissed() {
         self.tableView.reloadData()
+        
     }
     
     func modalFailSearching() {
