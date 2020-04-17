@@ -108,17 +108,22 @@ class TokenUtils {
         }
     }
     
-    func downloadDevToken() -> (kid: String, iss: String, privateKey: String)? {
-        let appdelegate = UIApplication.shared.delegate as? AppDelegate
+    func downloadDevToken(complete: @escaping (String, String, String) -> Void) -> Void {
+        var kid: String?
+        var iss: String?
+        var privateKey: String?
         
+        
+        let appdelegate = UIApplication.shared.delegate as? AppDelegate
         let docRef = appdelegate?.db.collection("Token").document("DevToken")
-        var tokenTuple: (kid: String, iss: String, privateKey: String)?
+        
         docRef?.getDocument{ (doc, error) in
             if error == nil { // success
                 if let data = doc?.data() {
-                    tokenTuple?.kid        = (data["kid"] as? String)!
-                    tokenTuple?.iss        = (data["iss"] as? String)!
-                    tokenTuple?.privateKey = (data["privateKey"] as? String)!
+                    kid        = (data["kid"] as? String)!
+                    iss        = (data["iss"] as? String)!
+                    privateKey = (data["privateKey"] as? String)!
+                    complete(kid!, iss!, privateKey!)
                 }
                 else {
                     print("ERROR - downloadDevToken() : document data nil")
@@ -128,6 +133,6 @@ class TokenUtils {
                 print("ERROR - downlaodDevToken() : \(error?.localizedDescription)")
             }
         }
-        return tokenTuple
+        return
     }
 }

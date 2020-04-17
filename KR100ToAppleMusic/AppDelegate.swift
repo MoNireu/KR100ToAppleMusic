@@ -25,39 +25,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tempMusicChartList: [MusicInfoVO]? = [MusicInfoVO]()
     lazy var musicChartList = [MusicInfoVO]()
     
-    let db = Firestore.firestore()
+    lazy var db = Firestore.firestore()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         FirebaseApp.configure()
         
-        let myHeader = Header(kid: "475YGH7887")
-        let myClaims = MyClaims(iss: "TBWQTY9PVU", iat: Date(), exp: Date(timeIntervalSinceNow: 3600))
-        let myJWT = JWT(header: myHeader, claims: myClaims)
+        let tokenUtil = TokenUtils()
+        var kid: String?
+        var iss: String?
+        var privateKey: String?
         
-        let privateKey: Data = """
-        -----BEGIN PRIVATE KEY-----
-        MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgAp+Z6+iw/pMbwC/3
-        sDhz4GY84eTKuHTtD95AorTILG6gCgYIKoZIzj0DAQehRANCAAQUV8CY6NFGWlcB
-        lBJVcLU7q7xbTMaXv898HymMpsl4IRPVnioASI5u5jaLu3sijxl0PJVMy2vtwKWm
-        n7i04LYr
-        -----END PRIVATE KEY-----
-""".data(using: .utf8)!
-        
-        
-        do {
-            let jwtSigner = JWTSigner.es256(privateKey: privateKey)
-            let jwtEncoder = JWTEncoder(jwtSigner: jwtSigner)
-            let jwtString = try jwtEncoder.encodeToString(myJWT)
+        tokenUtil.downloadDevToken() {(devKid, devIss, devPrivateKey) in
+            kid        = devKid
+            iss        = devIss
+            privateKey = devPrivateKey
             
-            let tokenUtil = TokenUtils()
-            tokenUtil.save("monireu.KR100ToAppleMusic", account: "devToken", value: jwtString)
+            let myHeader = Header(kid: kid)
+            let myClaims = MyClaims(iss: iss!, iat: Date(), exp: Date(timeIntervalSinceNow: 3600))
+            let myJWT = JWT(header: myHeader, claims: myClaims)
             
-            print(jwtString)
-        } catch let error as NSError {
-            print("JWF ERROR : \(error.localizedDescription)")
+            
+            let privateKeyData: Data = privateKey!.data(using: .utf8)!
+            
+            
+            do {
+                let jwtSigner = JWTSigner.es256(privateKey: privateKeyData)
+                let jwtEncoder = JWTEncoder(jwtSigner: jwtSigner)
+                let jwtString = try jwtEncoder.encodeToString(myJWT)
+                
+                tokenUtil.save("monireu.KR100ToAppleMusic", account: "devToken", value: jwtString)
+                
+            } catch let error as NSError {
+                print("JWF ERROR : \(error.localizedDescription)")
+            }
         }
-        
         return true
     }
     
