@@ -52,6 +52,39 @@ class MusicChartListVC: UITableViewController {
     var latestUpdateTime: String?
     
     
+    // MARK: View CallBack Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        searchController = UISearchController(searchResultsController: nil)
+        searchController?.delegate = self as UISearchControllerDelegate
+        searchController?.hidesNavigationBarDuringPresentation = false
+        searchController?.searchResultsUpdater = self
+        
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.toolbar.isHidden = true
+        navItem.searchController = searchController
+        
+        
+        self.tableView.allowsSelection = false
+        self.sortBtn.tintColor = .clear
+
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
+        self.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
+        
+        self.latestUpdateTime = self.currentUpdateTime
+        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
+        self.tableView.reloadData()
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
+    
+    
     @IBAction func sortAction(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
@@ -76,7 +109,7 @@ class MusicChartListVC: UITableViewController {
     
     
     @IBAction func createAction(_ sender: Any) {
-        // 탐색이 완료된 이후 일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
+        // 탐색이 완료된 이후 일 경우 AppleMusic에서 음악 탐색을 시작.
         if isSearchComplete == false {
             self.alert(message: "\(self.createBtn.title!)을 시작합니다.") {
                 // 탐색 로직 시작
@@ -117,7 +150,7 @@ class MusicChartListVC: UITableViewController {
             }
         } // END of isSearchComplete == false
         
-        // isSearchComplete이 True일 경우 AppleMusic에서 음악 탐색을 시작.
+        // isSearchComplete이 True일 경우 AppleMusic 플레이리스트 생성 작업을 실행한다.
         else {
             let alert = UIAlertController(title: "플레이리스트 생성", message: "생성할 플레이리스트의 제목 및 설명을 작성해주세요.", preferredStyle: .alert)
             alert.addTextField() {tf in
@@ -126,7 +159,7 @@ class MusicChartListVC: UITableViewController {
             }
             alert.addTextField() {tf in
                 tf.placeholder = "플레이리스트 설명"
-                tf.text = "Melon\(self.currentDate()) \(self.currentTime())에 생성됨)"
+                tf.text = "Melon\(self.currentDate()) (\(self.currentTime())에 생성됨)"
             }
             alert.addAction(UIAlertAction(title: "취소", style: .cancel))
             alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
@@ -155,44 +188,12 @@ class MusicChartListVC: UITableViewController {
                             self.okAlert(msg) {
                                 self.createBtn.isEnabled = true
                             }
-                    } // END of success:
+                        } // END of success:
                     ) // END of self.musicSearch.createPlayList CLOSURE
                 } // END of if-else Statement
             }) // END of alert.addAction("확인")
             self.present(alert, animated: true)
         }
-    }
-    
-    // MARK: View CallBack Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        searchController = UISearchController(searchResultsController: nil)
-        searchController?.delegate = self as? UISearchControllerDelegate
-        searchController?.hidesNavigationBarDuringPresentation = false
-        searchController?.searchResultsUpdater = self
-        
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.toolbar.isHidden = true
-        navItem.searchController = searchController
-        
-        
-        self.tableView.allowsSelection = false
-        self.sortBtn.tintColor = .clear
-
-        
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl?.attributedTitle = NSAttributedString(string: "당겨서 새로고침")
-        self.refreshControl?.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
-        
-        self.latestUpdateTime = self.currentUpdateTime
-        self.navigationItem.title = "\(self.currentUpdateTime!) 집계"
-        self.tableView.reloadData()
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.tableView.reloadData()
     }
     
     

@@ -253,6 +253,8 @@ class MusicSearchUtil: SKCloudServiceController {
     }
     
     func createPlayList(list: [MusicInfoVO], name: String, desc: String, fail: ((String)->Void)? = nil, success: ((String)->Void)? = nil) {
+        var tryCount = 0
+        
         let url = "https://api.music.apple.com/v1/me/library/playlists"
         let header = createHeader()
         let data = createFinalList(list: list)
@@ -278,9 +280,32 @@ class MusicSearchUtil: SKCloudServiceController {
                 let msg = "플레이리스트 생성을 완료했습니다."
                 success?(msg)
             } else {
-                let msg = "플레이리스트 생성 도중 문제가 발생하였습니다."
-                fail?(msg)
-                print(res)
+                if statusCode == 403 {
+                    // 몇번째 재시도인지 체크
+                    guard tryCount < 2 else {
+                        let msg = "플레이리스트 생성 도중 문제가 발생하였습니다."
+                        fail?(msg)
+                        return
+                    }
+                    // User Token 인증 재시도
+                    self.requestUserToken(forDeveloperToken: self.devToken!) {usrToken, error in
+                        if usrToken != nil { // Success
+                            self.tokenUtils.save("monireu.KR100ToAppleMusic", account: "userToken", value: usrToken!)
+                            print("Success : Requesting User Token.") // TEST - Status Code
+                            // 플레이리스트 생성 재시도
+                            self.createPlayList(list: list, name: name, desc: desc, fail: fail, success: success)
+                        }
+                        else {
+                            print("ERROR : requesting user token - \(error?.localizedDescription)")
+                            let msg = "플레이리스트 생성 도중 문제가 발생하였습니다."
+                            fail?(msg)
+                        }
+                    }
+                }
+                else {
+                    let msg = "플레이리스트 생성 도중 문제가 발생하였습니다."
+                    fail?(msg)
+                }
             }
         }
         
