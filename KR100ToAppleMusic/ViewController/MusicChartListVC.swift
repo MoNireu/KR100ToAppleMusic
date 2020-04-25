@@ -60,6 +60,7 @@ class MusicChartListVC: UITableViewController {
         searchController?.delegate = self as UISearchControllerDelegate
         searchController?.hidesNavigationBarDuringPresentation = false
         searchController?.searchResultsUpdater = self
+        searchController?.searchBar.delegate = self
         
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.toolbar.isHidden = true
@@ -474,6 +475,7 @@ class MusicChartListVC: UITableViewController {
     }
 }
 
+// MARK: - SearchBar
 extension MusicChartListVC: UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate {
     func filterContent(searchText: String) {
         self.filteredList = self.appdelegate.musicChartList.filter { (musicList: MusicInfoVO) -> Bool in
@@ -489,6 +491,11 @@ extension MusicChartListVC: UISearchBarDelegate, UISearchResultsUpdating, UISear
             return
         }
         filterContent(searchText: searchText!)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchController?.isActive = false
+        self.tableView.reloadData()
     }
     
 }
