@@ -128,13 +128,14 @@ class MusicSearchUtil: SKCloudServiceController {
         }
         
         let modifiedArtistString = modifyString(string: appdelegate.musicChartList[index].artist)
-        let modifiedMusicString  = modifyString(string: appdelegate.musicChartList[index].music)
+        let modifiedMusicString  = modifyString(string: appdelegate.musicChartList[index].music, isTitle: true)
         let musicInfoString: String = modifiedMusicString + " " + modifiedArtistString
         
         let param : [String : String] = [
             "term" : musicInfoString,
             "limit" : "1",
-            "types" : "songs,artists"
+            "l" : "ko-KR",
+            "types" : "songs"
         ]
         print(param)
         
@@ -311,16 +312,18 @@ class MusicSearchUtil: SKCloudServiceController {
         
     }
     
-    func modifyString(string: String?) -> String {
-        let string = (string?.replacingOccurrences(of: " ", with: " "))!
-
-        let index = string.lastIndex(of: "(") ?? string.endIndex
-        if index != string.endIndex { // "("가 존재할 경우
-            if string.startIndex != index && string[string.index(before: index)] == " " {
-                return String(string[..<string.index(before: index)])
+    func modifyString(string: String?, isTitle: Bool = false) -> String {
+        let originString = (string?.replacingOccurrences(of: " ", with: " "))!
+        
+//        let openBracketFirstIndex  = originString.firstIndex(of: "(") ?? originString.endIndex
+//        let closeBracketFirstIndex = originString.firstIndex(of: ")") ?? originString.endIndex
+        let openBracketLastIndex   = originString.lastIndex(of: "(") ?? originString.endIndex
+        
+        if openBracketLastIndex != originString.endIndex { // "("가 존재할 경우
+            if originString.startIndex != openBracketLastIndex && originString[originString.index(before: openBracketLastIndex)] == " " {
+                return String(originString[..<originString.index(before: openBracketLastIndex)])
             }
         }
-        
-        return String(string[..<string.endIndex])
+        return String(originString[..<originString.endIndex])
     }
 }
