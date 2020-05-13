@@ -67,6 +67,10 @@ class ManualMusicSearchVC: UIViewController {
         )
     }
     
+    @IBAction func dismiss_action(_ sender: Any) {
+        self.dismiss(animated: true)
+    }
+    
 }
 
 
