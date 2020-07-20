@@ -58,7 +58,7 @@ class HTMLParser {
                 let artist       = try doc.getElementsByClass("name ellipsis")
                 let title        = try doc.getElementsByClass("title ellipsis")
                 let contentChart = try doc.select("div.content.chart")
-                let rankChange   = try contentChart.select("span")
+//                let rankChange   = try contentChart.select("span")
                 let img          = try doc.getElementsByClass("img")
                 
                 
@@ -73,22 +73,22 @@ class HTMLParser {
                     musicInfoObject.artist = try artist.get(i).text()
                     
                     // 순위 변동 가져오기
-                    let rankStat = try rankChange.get(i).className()
-                    let rankChangeVal = try rankChange.get(i).text()
+//                    let rankStat = try rankChange.get(i).className()
+//                    let rankChangeVal = try rankChange.get(i).text()
                     
-                    if rankStat == "sprite rank none" {
-                        musicInfoObject.rankChangeStat = .no
-                        musicInfoObject.rankChangeVal  = "-"
-                    } else if rankStat == "sprite rank up" {
-                        musicInfoObject.rankChangeStat = .up
-                        musicInfoObject.rankChangeVal  = rankChangeVal
-                    } else if rankStat == "sprite rank down" {
-                        musicInfoObject.rankChangeStat = .down
-                        musicInfoObject.rankChangeVal  = rankChangeVal
-                    } else {
-                        musicInfoObject.rankChangeStat = .new
-                        musicInfoObject.rankChangeVal  = "NEW"
-                    }
+//                    if rankStat == "sprite rank none" {
+//                        musicInfoObject.rankChangeStat = .no
+//                        musicInfoObject.rankChangeVal  = "-"
+//                    } else if rankStat == "sprite rank up" {
+//                        musicInfoObject.rankChangeStat = .up
+//                        musicInfoObject.rankChangeVal  = rankChangeVal
+//                    } else if rankStat == "sprite rank down" {
+//                        musicInfoObject.rankChangeStat = .down
+//                        musicInfoObject.rankChangeVal  = rankChangeVal
+//                    } else {
+//                        musicInfoObject.rankChangeStat = .new
+//                        musicInfoObject.rankChangeVal  = "NEW"
+//                    }
                     
                     
                     // 앨범 이미지 가져오기

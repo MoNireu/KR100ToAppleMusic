@@ -20,7 +20,7 @@ class FakeLaunchScreen: UIViewController {
     var currentUpdateTime: String?
     
     override func viewDidAppear(_ animated: Bool) {
-        htmlParser.getUpdateTime(
+        htmlParser.œgetUpdateTime(
             success: { time in
                 self.htmlParser.parseResult(
                     success: {
