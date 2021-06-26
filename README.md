@@ -25,6 +25,6 @@ AppleMusic에서 음원 탐색
 <img src = "./ScreenShots/IMG_3699.PNG" width="40%">
 <img src = "./ScreenShots/IMG_3700.PNG" width="40%">
 
-플레이리스트 생성
+플레이리스트 생성  
 <img src = "./ScreenShots/IMG_3701.PNG" width="40%">
 
